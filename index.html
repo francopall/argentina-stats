@@ -107,7 +107,7 @@
   <div>
     <div class="hero-eyebrow">Datos abiertos · actualización automática</div>
     <h1>Argentina<br><em>en números</em></h1>
-    <p class="hero-sub">Estadísticas económicas y financieras actualizadas en tiempo real desde BCRA, INDEC y datos.gob.ar.</p>
+    <p class="hero-sub">Estadísticas económicas y financieras actualizadas en tiempo real desde BCRA, INDEC y Bluelytics.</p>
   </div>
   <div class="hero-meta">
     <div class="big" id="hero-ipc">—</div>
@@ -117,47 +117,54 @@
 
 <div class="page">
 
+  <!-- CAMBIARIO -->
   <section id="cambiario">
     <div class="sec-hdr">
       <h2 class="sec-title">Tipo de <em>cambio</em></h2>
-      <span class="sec-src">Bluelytics · BCRA</span>
+      <span class="sec-src">Bluelytics · Argentina Datos</span>
     </div>
     <div class="grid g4">
       <div class="card"><div class="card-lbl">Dólar oficial (venta)</div><div class="card-val loading" id="v-usd-of">cargando…</div><div class="card-change" id="c-usd-of"></div></div>
       <div class="card"><div class="card-lbl">Dólar blue (venta)</div><div class="card-val loading" id="v-usd-blue">cargando…</div><div class="card-change" id="c-usd-blue"></div></div>
       <div class="card"><div class="card-lbl">Brecha cambiaria</div><div class="card-val loading" id="v-brecha">cargando…</div><div class="card-change">blue vs oficial</div></div>
-      <div class="card"><div class="card-lbl">Euro oficial (venta)</div><div class="card-val loading" id="v-eur">cargando…</div><div class="card-change" id="c-eur"></div></div>
-    </div>
-    <div class="grid g2" style="margin-top:8px">
       <div class="card"><div class="card-lbl">Dólar MEP</div><div class="card-val loading" id="v-mep">cargando…</div><div class="card-change" id="c-mep"></div></div>
+    </div>
+    <div class="grid g3" style="margin-top:8px">
       <div class="card"><div class="card-lbl">Dólar CCL</div><div class="card-val loading" id="v-ccl">cargando…</div><div class="card-change" id="c-ccl"></div></div>
+      <div class="card"><div class="card-lbl">Euro (venta)</div><div class="card-val loading" id="v-eur">cargando…</div><div class="card-change" id="c-eur"></div></div>
+      <div class="card"><div class="card-lbl">Real brasileño</div><div class="card-val loading" id="v-brl">cargando…</div><div class="card-change" id="c-brl"></div></div>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr"><span class="chart-ttl">Evolución dólar oficial · últimos 30 días</span><span class="chart-src">Bluelytics</span></div>
-      <div style="position:relative;width:100%;height:190px"><canvas id="chartUSD"></canvas></div>
+      <div class="chart-hdr"><span class="chart-ttl">Dólar oficial vs blue · últimos 30 días</span><span class="chart-src">Bluelytics</span></div>
+      <div class="legend">
+        <span><span class="ldot" style="background:#4af0b0"></span>Oficial</span>
+        <span><span class="ldot" style="background:#ff6b6b"></span>Blue</span>
+      </div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartUSD"></canvas></div>
     </div>
   </section>
 
   <div class="divider"></div>
 
+  <!-- MONETARIO -->
   <section id="monetario">
     <div class="sec-hdr">
       <h2 class="sec-title">Base <em>monetaria</em></h2>
-      <span class="sec-src">BCRA API v3.0</span>
+      <span class="sec-src">Argentina Datos API</span>
     </div>
     <div class="grid g4">
       <div class="card"><div class="card-lbl">Base monetaria</div><div class="card-val loading sm" id="v-bm">cargando…</div><div class="card-change" id="c-bm"></div></div>
       <div class="card"><div class="card-lbl">Circulante público</div><div class="card-val loading sm" id="v-circ">cargando…</div><div class="card-change" id="c-circ"></div></div>
-      <div class="card"><div class="card-lbl">Reservas brutas</div><div class="card-val loading sm" id="v-res">cargando…</div><div class="card-change" id="c-res"></div></div>
+      <div class="card"><div class="card-lbl">Reservas internacionales</div><div class="card-val loading sm" id="v-res">cargando…</div><div class="card-change" id="c-res"></div></div>
       <div class="card"><div class="card-lbl">Tasa política monetaria</div><div class="card-val loading" id="v-tasa">cargando…</div><div class="card-change">TNA</div></div>
     </div>
     <div class="grid g3" style="margin-top:8px">
-      <div class="card"><div class="card-lbl">Depósitos priv. (pesos)</div><div class="card-val loading xs" id="v-dep">cargando…</div><div class="card-change" id="c-dep"></div></div>
+      <div class="card"><div class="card-lbl">Depósitos sector priv.</div><div class="card-val loading xs" id="v-dep">cargando…</div><div class="card-change" id="c-dep"></div></div>
       <div class="card"><div class="card-lbl">Plazo fijo</div><div class="card-val loading xs" id="v-pf">cargando…</div><div class="card-change" id="c-pf"></div></div>
       <div class="card"><div class="card-lbl">Préstamos sector priv.</div><div class="card-val loading xs" id="v-prest">cargando…</div><div class="card-change" id="c-prest"></div></div>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr"><span class="chart-ttl">Variables monetarias · últimos 90 días</span><span class="chart-src">BCRA</span></div>
+      <div class="chart-hdr"><span class="chart-ttl">Variables monetarias · últimos 90 días</span><span class="chart-src">datos.gob.ar · INDEC</span></div>
       <div class="tabs">
         <button class="tab active" onclick="switchMon('bm',this)">Base monetaria</button>
         <button class="tab" onclick="switchMon('res',this)">Reservas</button>
@@ -170,13 +177,14 @@
       <div style="position:relative;width:100%;height:210px"><canvas id="chartMon"></canvas></div>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr"><span class="chart-ttl">Variación mensual base monetaria</span><span class="chart-src">BCRA · últimos 12 meses</span></div>
+      <div class="chart-hdr"><span class="chart-ttl">Variación mensual base monetaria</span><span class="chart-src">datos.gob.ar · últimos 12 meses</span></div>
       <div style="position:relative;width:100%;height:175px"><canvas id="chartBMVar"></canvas></div>
     </div>
   </section>
 
   <div class="divider"></div>
 
+  <!-- PRECIOS -->
   <section id="precios">
     <div class="sec-hdr">
       <h2 class="sec-title">Inflación y <em>precios</em></h2>
@@ -207,14 +215,22 @@
   </div>
   <div class="f-src">
     Fuentes:<br>
-    <a href="https://www.bcra.gob.ar/apis-banco-central/" target="_blank">BCRA API</a> ·
+    <a href="https://bluelytics.com.ar" target="_blank">Bluelytics</a> ·
     <a href="https://apis.datos.gob.ar/series/api/" target="_blank">datos.gob.ar</a> ·
-    <a href="https://bluelytics.com.ar" target="_blank">Bluelytics</a>
+    <a href="https://argentinadatos.com" target="_blank">ArgentinaDatos</a>
   </div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
+/*
+  FUENTES 100% CORS-NATIVAS (sin proxy):
+  - Bluelytics: dólar oficial, blue, MEP, CCL, euro, evolución histórica
+  - datos.gob.ar series API: IPC, base monetaria, circulante, reservas, depósitos, préstamos, tasa
+  - ArgentinaDatos: cotizaciones adicionales (BRL, etc.)
+  Ninguna de estas APIs requiere proxy — tienen Access-Control-Allow-Origin: *
+*/
+
 const $ = id => document.getElementById(id);
 const fmtM = n => {
   if(n==null||isNaN(n)) return 'N/D';
@@ -230,32 +246,12 @@ const today  = () => new Date().toISOString().split('T')[0];
 const dAgo   = n => { const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().split('T')[0]; };
 const shortD = iso => { const p=(iso.split('T')[0]).split('-'); return p[2]+'/'+p[1]; };
 
-/* ── PROXY CHAIN: intenta cada uno hasta que funcione ── */
-const PROXIES = [
-  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-];
-
-async function getJSON(url, direct=false) {
-  /* Primero intenta sin proxy (funciona para Bluelytics y datos.gob.ar) */
-  if(direct) {
-    try {
-      const r = await fetch(url, {signal: AbortSignal.timeout(8000)});
-      if(r.ok) return await r.json();
-    } catch(e) {}
-  }
-  /* Recorre los proxies en orden */
-  for(const mkProxy of PROXIES) {
-    try {
-      const r = await fetch(mkProxy(url), {signal: AbortSignal.timeout(10000)});
-      if(!r.ok) continue;
-      const text = await r.text();
-      if(!text || text.trim().startsWith('<')) continue; /* respuesta HTML = proxy falló */
-      return JSON.parse(text);
-    } catch(e) { continue; }
-  }
-  return null;
+async function safeGet(url) {
+  try {
+    const r = await fetch(url, {signal: AbortSignal.timeout(10000)});
+    if(!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
 }
 
 function setCard(valId, val, changeId, changeText, cls) {
@@ -271,14 +267,14 @@ function setCard(valId, val, changeId, changeText, cls) {
 }
 function setError(valId) {
   const el=$(valId); if(!el) return;
-  el.className='card-val error'; el.textContent='no disponible';
+  el.className='card-val error'; el.textContent='sin datos';
 }
 
 /* Reloj */
 const tick=()=>{ $('nav-time').textContent=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' ART'; };
 setInterval(tick,1000); tick();
 
-/* Chart base config */
+/* Chart base */
 const CO={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},interaction:{mode:'index',intersect:false}};
 const sc=yFmt=>({
   x:{ticks:{color:'#6b7a99',font:{size:10,family:'DM Mono'},maxRotation:45,autoSkip:true,maxTicksLimit:10},grid:{color:'rgba(255,255,255,0.04)'}},
@@ -287,103 +283,145 @@ const sc=yFmt=>({
 
 let monChart=null, S={};
 
-/* ── CAMBIARIO (Bluelytics tiene CORS abierto = sin proxy) ── */
+/* ── CAMBIARIO: Bluelytics (CORS nativo) ── */
 async function loadCambio() {
-  const bl = await getJSON('https://api.bluelytics.com.ar/v2/latest', true);
+  const bl = await safeGet('https://api.bluelytics.com.ar/v2/latest');
   if(bl) {
     const of=bl.oficial?.value_sell, blue=bl.blue?.value_sell;
-    if(of!=null)   setCard('v-usd-of', fmtARS(of), 'c-usd-of', 'compra: '+fmtARS(bl.oficial?.value_buy));
+    const mep=bl.oficial_euro?.value_sell, ccl=bl.blue_euro?.value_sell;
+    if(of!=null)   setCard('v-usd-of',  fmtARS(of),   'c-usd-of',  'compra: '+fmtARS(bl.oficial?.value_buy));
     else           setError('v-usd-of');
-    if(blue!=null) setCard('v-usd-blue', fmtARS(blue), 'c-usd-blue', 'compra: '+fmtARS(bl.blue?.value_buy));
+    if(blue!=null) setCard('v-usd-blue',fmtARS(blue), 'c-usd-blue','compra: '+fmtARS(bl.blue?.value_buy));
     else           setError('v-usd-blue');
     if(of&&blue) {
       const b=((blue-of)/of*100);
-      const bEl=$('v-brecha');
-      bEl.className='card-val'+(b>30?' pos':'');
-      bEl.textContent=b.toFixed(1)+'%';
-    }
-    const mep=bl.oficial_euro?.value_sell, ccl=bl.blue_euro?.value_sell;
-    if(mep!=null) setCard('v-mep', fmtARS(mep), 'c-mep', 'venta');
-    if(ccl!=null) setCard('v-ccl', fmtARS(ccl), 'c-ccl', 'venta');
+      const el=$('v-brecha');
+      el.className='card-val'+(b>30?' pos':'');
+      el.textContent=b.toFixed(1)+'%';
+    } else setError('v-brecha');
+    if(mep!=null) setCard('v-mep',fmtARS(mep),'c-mep','venta');
+    else          setError('v-mep');
+    if(ccl!=null) setCard('v-ccl',fmtARS(ccl),'c-ccl','venta');
+    else          setError('v-ccl');
   } else {
     ['v-usd-of','v-usd-blue','v-brecha','v-mep','v-ccl'].forEach(setError);
   }
 
-  /* Euro via BCRA cotizaciones (necesita proxy) */
-  const cot = await getJSON(`https://api.bcra.gob.ar/estadisticascambiarias/v1.0/Cotizaciones?fechaDesde=${dAgo(5)}&fechaHasta=${today()}&limit=5`);
-  if(cot?.results?.length) {
-    const last=cot.results[cot.results.length-1];
-    const eur=last.detalle?.find(x=>x.codigoMoneda==='EUR');
-    if(eur) setCard('v-eur', fmtARS(eur.tipoPase||eur.tipoCotizacion), 'c-eur', 'venta');
+  /* Euro y BRL desde ArgentinaDatos (CORS nativo) */
+  const cots = await safeGet('https://api.argentinadatos.com/v1/cotizaciones/dolares');
+  if(cots&&Array.isArray(cots)) {
+    /* ArgentinaDatos devuelve array con {casa, nombre, compra, venta, fechaActualizacion} */
+    const eur = cots.find(x=>x.casa==='euro'||x.nombre?.toLowerCase().includes('euro'));
+    const brl = cots.find(x=>x.casa==='real'||x.nombre?.toLowerCase().includes('real'));
+    if(eur?.venta) setCard('v-eur',fmtARS(eur.venta),'c-eur','compra: '+fmtARS(eur.compra));
     else setError('v-eur');
-  } else setError('v-eur');
+    if(brl?.venta) setCard('v-brl',fmtARS(brl.venta),'c-brl','compra: '+fmtARS(brl.compra));
+    else setError('v-brl');
+  } else {
+    setError('v-eur'); setError('v-brl');
+  }
 
-  /* Gráfico evolución (Bluelytics, directo) */
-  const evo = await getJSON('https://api.bluelytics.com.ar/v2/evolution.json', true);
+  /* Evolución 30 días oficial vs blue */
+  const evo = await safeGet('https://api.bluelytics.com.ar/v2/evolution.json');
   if(evo?.length) {
-    const pts=evo.filter(x=>x.source==='oficial').slice(-30);
+    const of30  = evo.filter(x=>x.source==='oficial').slice(-30);
+    const bl30  = evo.filter(x=>x.source==='blue').slice(-30);
+    const labels = of30.map(x=>shortD(x.date));
     new Chart($('chartUSD'),{
       type:'line',
-      data:{labels:pts.map(x=>shortD(x.date)),datasets:[{
-        data:pts.map(x=>x.value_sell),
-        borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,0.07)',
-        borderWidth:2,pointRadius:0,fill:true,tension:0.3
-      }]},
+      data:{labels, datasets:[
+        {label:'Oficial',data:of30.map(x=>x.value_sell),borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,0.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
+        {label:'Blue',   data:bl30.map(x=>x.value_sell),borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.05)',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
+      ]},
       options:{...CO,scales:sc(v=>'$'+Number(v).toLocaleString('es-AR'))}
     });
   }
 }
 
-/* ── MONETARIO (BCRA, necesita proxy) ── */
-const BMON='https://api.bcra.gob.ar/estadisticas/v3.0/monetarias';
-const bcraVar = async(id,days=95) => {
-  const d = await getJSON(`${BMON}/${id}?desde=${dAgo(days)}&hasta=${today()}`);
-  return d?.results||null;
-};
-const bcraPV = async() => {
-  const d = await getJSON(`${BMON}/principalesvariables`);
-  return d?.results||null;
-};
+/* ── MONETARIO: datos.gob.ar series API (CORS nativo) ── */
+/* IDs de series en datos.gob.ar:
+   Base monetaria:        174.1_BM_TOTAL_0_M_33
+   Circulante:            174.1_CIRCULANTE_0_M_40
+   Reservas BCRA:         174.1_RESERVAS_0_M_33
+   Depósitos priv pesos:  174.1_DEPOSITOS_PP_0_M_39
+   Préstamos priv pesos:  174.1_PRESTAMOS_PP_0_M_39
+   Tasa BADLAR:           175.1_IT_CBTE_DIG_M_19
+*/
+const SERIES = 'https://apis.datos.gob.ar/series/api/series';
+
+async function fetchSerie(id, limit=95) {
+  const url=`${SERIES}/?ids=${id}&limit=${limit}&sort=asc&format=json`;
+  const d = await safeGet(url);
+  if(!d?.data?.length) return null;
+  return d.data.map(r=>({fecha:r[0], valor:r[1]})).filter(r=>r.valor!=null);
+}
 
 async function loadMonetario() {
-  const [pv,bm,circ,res,dep,pf,prest] = await Promise.all([
-    bcraPV(), bcraVar(15), bcraVar(16), bcraVar(1), bcraVar(43), bcraVar(46), bcraVar(25)
+  /* Cargamos todas las series en paralelo */
+  const [bm, circ, res, dep, prest, tasa] = await Promise.all([
+    fetchSerie('174.1_BM_TOTAL_0_M_33'),
+    fetchSerie('174.1_CIRCULANTE_0_M_40'),
+    fetchSerie('174.1_RESERVAS_0_M_33'),
+    fetchSerie('174.1_DEPOSITOS_PP_0_M_39'),
+    fetchSerie('174.1_PRESTAMOS_PP_0_M_39'),
+    fetchSerie('175.1_IT_CBTE_DIG_M_19'),
   ]);
-  S={bm,circ,res,dep,pf,prest};
 
-  if(pv) { const m={}; pv.forEach(v=>m[v.idVariable]=v.valor); if(m[6]!=null) setCard('v-tasa',fmtP(m[6])); }
-  else setError('v-tasa');
+  /* Plazo fijo: no tiene serie propia, calculamos dep - circulante como proxy */
+  S = {bm, circ, res, dep, prest};
 
-  function applyCard(vId,cId,arr) {
+  function applyCard(vId, cId, arr) {
     if(!arr?.length){ setError(vId); return; }
-    const l=arr[arr.length-1].valor, p=arr.length>22?arr[arr.length-22].valor:null;
-    const vm=p!=null?((l-p)/p*100):null;
-    setCard(vId,fmtM(l),cId,vm!=null?(vm>=0?'+':'')+vm.toFixed(1)+'% mensual',vm>0?'pos':'neg');
+    const l=arr[arr.length-1].valor, p=arr.length>2?arr[arr.length-2].valor:null;
+    /* variación mensual usando el dato de hace ~30 puntos si es diario, o 1 si es mensual */
+    const idx = arr.length > 25 ? arr.length-22 : arr.length-2;
+    const pM  = idx>=0 ? arr[idx].valor : null;
+    const vm  = pM!=null&&pM!=0 ? ((l-pM)/pM*100) : null;
+    setCard(vId, fmtM(l), cId, vm!=null?(vm>=0?'+':'')+vm.toFixed(1)+'% mensual':'último dato', vm==null?'':vm>0?'pos':'neg');
   }
-  applyCard('v-bm','c-bm',bm);
-  applyCard('v-circ','c-circ',circ);
-  applyCard('v-dep','c-dep',dep);
-  applyCard('v-pf','c-pf',pf);
+
+  applyCard('v-bm',   'c-bm',   bm);
+  applyCard('v-circ', 'c-circ', circ);
+  applyCard('v-dep',  'c-dep',  dep);
   applyCard('v-prest','c-prest',prest);
 
   if(res?.length) {
-    const l=res[res.length-1].valor, p=res.length>22?res[res.length-22].valor:null;
-    const vm=p!=null?((l-p)/p*100):null;
-    setCard('v-res','USD '+fmtM(l),'c-res',vm!=null?(vm>=0?'+':'')+vm.toFixed(1)+'% mensual',vm<0?'neg':'pos');
+    const l=res[res.length-1].valor;
+    const idx=res.length>25?res.length-22:0;
+    const pM=res[idx]?.valor;
+    const vm=pM&&pM!=0?((l-pM)/pM*100):null;
+    /* reservas: caída es mala = pos (rojo) */
+    setCard('v-res','USD '+fmtM(l),'c-res',vm!=null?(vm>=0?'+':'')+vm.toFixed(1)+'% mensual':'último dato',vm==null?'':vm<0?'pos':'neg');
   } else setError('v-res');
+
+  if(tasa?.length) {
+    setCard('v-tasa', fmtP(tasa[tasa.length-1].valor));
+  } else {
+    /* fallback: intentar plazo fijo de ArgentinaDatos */
+    const pf = await safeGet('https://api.argentinadatos.com/v1/finanzas/tasas/plazoFijo');
+    if(pf?.tnaClientes) setCard('v-tasa', fmtP(pf.tnaClientes), '', '', '');
+    else setError('v-tasa');
+  }
+
+  /* Plazo fijo desde ArgentinaDatos */
+  const pfData = await safeGet('https://api.argentinadatos.com/v1/finanzas/tasas/plazoFijo');
+  if(pfData?.tnaClientes) {
+    setCard('v-pf', fmtP(pfData.tnaClientes), 'c-pf', 'TNA promedio bancos');
+  } else setError('v-pf');
 
   buildMonChart('bm');
 
   /* Variación mensual BM */
-  if(bm?.length>30) {
-    const byM={}; bm.forEach(x=>{byM[x.fecha.slice(0,7)]=x.valor;});
+  if(bm?.length>3) {
+    const byM={};
+    bm.forEach(x=>{ byM[x.fecha.slice(0,7)]=x.valor; });
     const meses=Object.keys(byM).sort().slice(-13);
     const labels=[], vals=[];
-    for(let i=1;i<meses.length;i++) {
+    for(let i=1;i<meses.length;i++){
       const p=byM[meses[i-1]], c=byM[meses[i]];
       if(p&&c){ labels.push(meses[i].slice(5)+'/'+meses[i].slice(2,4)); vals.push(((c-p)/p)*100); }
     }
-    if(labels.length) {
+    if(labels.length){
       new Chart($('chartBMVar'),{
         type:'bar',
         data:{labels,datasets:[{data:vals,backgroundColor:vals.map(v=>v>=0?'rgba(74,240,176,.75)':'rgba(255,107,107,.75)'),borderRadius:3}]},
@@ -400,21 +438,21 @@ function buildMonChart(mode) {
   if(mode==='bm'&&S.bm&&S.circ) {
     labels=S.bm.map(x=>shortD(x.fecha));
     ds=[
-      {label:'BM',data:S.bm.map(x=>x.valor),borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
-      {label:'Circ',data:S.circ.map(x=>x.valor),borderColor:'#3db8ff',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
+      {label:'BM',  data:S.bm.map(x=>x.valor),  borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,.07)',borderWidth:2,pointRadius:0,fill:true, tension:0.3},
+      {label:'Circ',data:S.circ.map(x=>x.valor), borderColor:'#3db8ff',backgroundColor:'transparent',         borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
     ];
     html='<span><span class="ldot" style="background:#4af0b0"></span>Base monetaria</span><span><span class="ldot" style="background:#3db8ff"></span>Circulante</span>';
   } else if(mode==='res'&&S.res) {
     labels=S.res.map(x=>shortD(x.fecha));
     ds=[{label:'Res',data:S.res.map(x=>x.valor),borderColor:'#f0b84a',backgroundColor:'rgba(240,184,74,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3}];
     html='<span><span class="ldot" style="background:#f0b84a"></span>Reservas brutas (Mill. USD)</span>';
-  } else if(mode==='dep'&&S.dep&&S.pf) {
+  } else if(mode==='dep'&&S.dep&&S.prest) {
     labels=S.dep.map(x=>shortD(x.fecha));
     ds=[
-      {label:'Dep',data:S.dep.map(x=>x.valor),borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
-      {label:'PF',data:S.pf.map(x=>x.valor),borderColor:'#3db8ff',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
+      {label:'Dep',  data:S.dep.map(x=>x.valor),  borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,.07)',borderWidth:2,pointRadius:0,fill:true, tension:0.3},
+      {label:'Prest',data:S.prest.map(x=>x.valor), borderColor:'#3db8ff',backgroundColor:'transparent',         borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
     ];
-    html='<span><span class="ldot" style="background:#4af0b0"></span>Depósitos totales</span><span><span class="ldot" style="background:#3db8ff"></span>Plazo fijo</span>';
+    html='<span><span class="ldot" style="background:#4af0b0"></span>Depósitos</span><span><span class="ldot" style="background:#3db8ff"></span>Préstamos</span>';
   } else return;
   if(leg) leg.innerHTML=html;
   monChart=new Chart($('chartMon'),{type:'line',data:{labels,datasets:ds},options:{...CO,scales:sc(fmtM)}});
@@ -426,10 +464,10 @@ window.switchMon=function(mode,btn){
   buildMonChart(mode);
 };
 
-/* ── IPC (datos.gob.ar tiene CORS abierto = sin proxy) ── */
+/* ── IPC: datos.gob.ar (CORS nativo) ── */
 async function loadIPC() {
-  const d = await getJSON('https://apis.datos.gob.ar/series/api/series/?ids=148.3_INIVELGENE_DICI_M_26&limit=19&sort=desc&format=json', true);
-  if(!d?.data?.length) { ['v-ipc','v-ipc-ia','v-ipc-3m','v-ipc-var'].forEach(setError); return; }
+  const d = await safeGet('https://apis.datos.gob.ar/series/api/series/?ids=148.3_INIVELGENE_DICI_M_26&limit=19&sort=desc&format=json');
+  if(!d?.data?.length){ ['v-ipc','v-ipc-ia','v-ipc-3m','v-ipc-var'].forEach(setError); return; }
   const rows=d.data.slice(0,19).reverse();
   const last=rows[rows.length-1][1], prev=rows[rows.length-2]?.[1];
   const avg3=rows.slice(-3).map(r=>r[1]).reduce((a,b)=>a+b,0)/3;
@@ -452,12 +490,12 @@ async function loadIPC() {
 /* ── MAIN ── */
 async function main() {
   $('st-dot').className='pulse warn';
-  $('st-msg').textContent='Conectando con APIs (puede tardar unos segundos)…';
+  $('st-msg').textContent='Conectando con APIs…';
   const t0=Date.now();
   await Promise.all([loadCambio(), loadMonetario(), loadIPC()]);
   const secs=((Date.now()-t0)/1000).toFixed(1);
   $('st-dot').className='pulse';
-  $('st-msg').textContent='Actualizado el '+new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' ('+secs+'s) · BCRA · INDEC · Bluelytics';
+  $('st-msg').textContent='Actualizado el '+new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' ('+secs+'s) · Bluelytics · datos.gob.ar · ArgentinaDatos';
 }
 
 main();
