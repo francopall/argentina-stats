@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argentina en Números</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0e14;--bg2:#111720;--bg3:#182030;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --text:#e8edf5;--muted:#6b7a99;--faint:#3a4660;
+    --accent:#4af0b0;--accent2:#3db8ff;--danger:#ff6b6b;--warn:#f0b84a;
+    --fd:'Fraunces',serif;--fm:'DM Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--fm);font-size:13px;line-height:1.6}
+
+  nav{position:sticky;top:0;z-index:100;background:rgba(10,14,20,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px}
+  .nav-brand{font-family:var(--fd);font-size:17px;font-weight:600;color:var(--text);text-decoration:none}
+  .nav-brand span{color:var(--accent)}
+  .nav-links a{font-size:11px;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:4px;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-time{font-size:11px;color:var(--faint)}
+
+  .hero{padding:4rem 2rem 2.5rem;max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end}
+  .hero-eyebrow{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+  .hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
+  .hero h1{font-family:var(--fd);font-size:clamp(32px,6vw,56px);font-weight:300;line-height:1.05;letter-spacing:-.02em}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero-sub{margin-top:.75rem;color:var(--muted);font-size:12px;max-width:400px;line-height:1.7}
+  .hero-meta{text-align:right}
+  .hero-meta .big{font-family:var(--fd);font-size:40px;font-weight:600;color:var(--accent2);line-height:1}
+  .hero-meta .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+
+  .page{max-width:900px;margin:0 auto;padding:0 2rem 4rem}
+  .divider{height:0.5px;background:var(--border);margin:2.5rem 0}
+
+  .sec-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1rem}
+  .sec-title{font-family:var(--fd);font-size:21px;font-weight:300;letter-spacing:-.01em}
+  .sec-title em{font-style:italic;color:var(--accent)}
+  .sec-src{font-size:10px;color:var(--faint);letter-spacing:.04em;text-transform:uppercase}
+
+  .grid{display:grid;gap:8px}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:680px){.g4,.g3{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:400px){.g4,.g3,.g2{grid-template-columns:1fr}}
+
+  .card{background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;padding:.9rem 1rem;position:relative;overflow:hidden;transition:border-color .2s}
+  .card:hover{border-color:var(--border2)}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent)}
+  .card-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+  .card-val{font-family:var(--fd);font-size:24px;font-weight:600;color:var(--text);line-height:1.1}
+  .card-val.sm{font-size:19px}
+  .card-val.xs{font-size:15px}
+  .card-val.loading{font-family:var(--fm);font-size:11px;color:var(--faint);font-weight:400;animation:blink 1.4s infinite}
+  @keyframes blink{0%,100%{opacity:.6}50%{opacity:1}}
+  .card-change{font-size:11px;margin-top:3px;color:var(--muted)}
+  .card-change.pos{color:var(--danger)}
+  .card-change.neg{color:var(--accent)}
+
+  .chart-box{background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;padding:1.1rem 1.1rem .9rem;margin-top:8px}
+  .chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+  .chart-ttl{font-size:13px;font-weight:500;color:var(--text)}
+  .chart-src{font-size:10px;color:var(--faint)}
+  .tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+  .tab{font-size:10px;padding:3px 9px;border-radius:20px;border:0.5px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--fm);text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
+  .tab:hover{color:var(--text)}
+  .tab.active{background:var(--bg3);color:var(--accent);border-color:var(--accent)}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--muted);margin-bottom:8px}
+  .legend span{display:flex;align-items:center;gap:4px}
+  .ldot{width:8px;height:8px;border-radius:2px}
+
+  .status{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--faint);padding:.75rem 0;border-top:0.5px solid var(--border);margin-top:1.5rem}
+  .pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+  .pulse.err{background:var(--danger);animation:none}
+  .pulse.warn{background:var(--warn);animation:none}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  footer{border-top:0.5px solid var(--border);padding:2rem;max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+  .f-brand{font-family:var(--fd);font-size:15px;font-weight:600;color:var(--muted)}
+  .f-brand span{color:var(--accent)}
+  footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
+  .f-src{font-size:10px;color:var(--faint);text-align:right}
+  .f-src a{color:var(--muted);text-decoration:none}
+  .f-src a:hover{color:var(--accent)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .page>*{animation:fadeUp .4s ease both}
+  .page>*:nth-child(1){animation-delay:.05s}.page>*:nth-child(2){animation-delay:.1s}
+  .page>*:nth-child(3){animation-delay:.15s}.page>*:nth-child(4){animation-delay:.2s}
+  .page>*:nth-child(5){animation-delay:.25s}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#">Argentina <span>en números</span></a>
+  <div class="nav-links">
+    <a href="#cambiario">Cambiario</a>
+    <a href="#monetario">Monetario</a>
+    <a href="#precios">Precios</a>
+  </div>
+  <span class="nav-time" id="nav-time"></span>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Datos abiertos · actualización automática</div>
+    <h1>Argentina<br><em>en números</em></h1>
+    <p class="hero-sub">Estadísticas económicas y financieras actualizadas en tiempo real desde BCRA, INDEC y datos.gob.ar.</p>
+  </div>
+  <div class="hero-meta">
+    <div class="big" id="hero-ipc">—</div>
+    <div class="lbl">inflación mensual</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <section id="cambiario">
+    <div class="sec-hdr">
+      <h2 class="sec-title">Tipo de <em>cambio</em></h2>
+      <span class="sec-src">BCRA · Bluelytics</span>
+    </div>
+    <div class="grid g4">
+      <div class="card"><div class="card-lbl">Dólar oficial (venta)</div><div class="card-val loading" id="v-usd-of">cargando…</div><div class="card-change" id="c-usd-of"></div></div>
+      <div class="card"><div class="card-lbl">Dólar blue (venta)</div><div class="card-val loading" id="v-usd-blue">cargando…</div><div class="card-change" id="c-usd-blue"></div></div>
+      <div class="card"><div class="card-lbl">Brecha cambiaria</div><div class="card-val loading" id="v-brecha">cargando…</div><div class="card-change">blue vs oficial</div></div>
+      <div class="card"><div class="card-lbl">Euro oficial (venta)</div><div class="card-val loading" id="v-eur">cargando…</div><div class="card-change" id="c-eur"></div></div>
+    </div>
+    <div class="grid g2" style="margin-top:8px">
+      <div class="card"><div class="card-lbl">Dólar MEP</div><div class="card-val loading" id="v-mep">cargando…</div><div class="card-change" id="c-mep"></div></div>
+      <div class="card"><div class="card-lbl">Dólar CCL</div><div class="card-val loading" id="v-ccl">cargando…</div><div class="card-change" id="c-ccl"></div></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-hdr"><span class="chart-ttl">Evolución dólar oficial · últimos 30 días</span><span class="chart-src">Bluelytics</span></div>
+      <div style="position:relative;width:100%;height:190px"><canvas id="chartUSD"></canvas></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="monetario">
+    <div class="sec-hdr">
+      <h2 class="sec-title">Base <em>monetaria</em></h2>
+      <span class="sec-src">BCRA API v3.0</span>
+    </div>
+    <div class="grid g4">
+      <div class="card"><div class="card-lbl">Base monetaria</div><div class="card-val loading sm" id="v-bm">cargando…</div><div class="card-change" id="c-bm"></div></div>
+      <div class="card"><div class="card-lbl">Circulante público</div><div class="card-val loading sm" id="v-circ">cargando…</div><div class="card-change" id="c-circ"></div></div>
+      <div class="card"><div class="card-lbl">Reservas brutas</div><div class="card-val loading sm" id="v-res">cargando…</div><div class="card-change" id="c-res"></div></div>
+      <div class="card"><div class="card-lbl">Tasa política monetaria</div><div class="card-val loading" id="v-tasa">cargando…</div><div class="card-change">TNA</div></div>
+    </div>
+    <div class="grid g3" style="margin-top:8px">
+      <div class="card"><div class="card-lbl">Depósitos priv. (pesos)</div><div class="card-val loading xs" id="v-dep">cargando…</div><div class="card-change" id="c-dep"></div></div>
+      <div class="card"><div class="card-lbl">Plazo fijo</div><div class="card-val loading xs" id="v-pf">cargando…</div><div class="card-change" id="c-pf"></div></div>
+      <div class="card"><div class="card-lbl">Préstamos sector priv.</div><div class="card-val loading xs" id="v-prest">cargando…</div><div class="card-change" id="c-prest"></div></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-hdr"><span class="chart-ttl">Variables monetarias · últimos 90 días</span><span class="chart-src">BCRA</span></div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchMon('bm',this)">Base monetaria</button>
+        <button class="tab" onclick="switchMon('res',this)">Reservas</button>
+        <button class="tab" onclick="switchMon('dep',this)">Depósitos</button>
+      </div>
+      <div class="legend" id="mon-legend">
+        <span><span class="ldot" style="background:#4af0b0"></span>Base monetaria</span>
+        <span><span class="ldot" style="background:#3db8ff"></span>Circulante</span>
+      </div>
+      <div style="position:relative;width:100%;height:210px"><canvas id="chartMon"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-hdr"><span class="chart-ttl">Variación mensual base monetaria</span><span class="chart-src">BCRA · últimos 12 meses</span></div>
+      <div style="position:relative;width:100%;height:175px"><canvas id="chartBMVar"></canvas></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="precios">
+    <div class="sec-hdr">
+      <h2 class="sec-title">Inflación y <em>precios</em></h2>
+      <span class="sec-src">INDEC · datos.gob.ar</span>
+    </div>
+    <div class="grid g4">
+      <div class="card"><div class="card-lbl">IPC mensual (últ. dato)</div><div class="card-val loading" id="v-ipc">cargando…</div><div class="card-change" id="c-ipc"></div></div>
+      <div class="card"><div class="card-lbl">Inflación interanual</div><div class="card-val loading" id="v-ipc-ia">cargando…</div><div class="card-change">últ. 12 meses</div></div>
+      <div class="card"><div class="card-lbl">Promedio 3 meses</div><div class="card-val loading" id="v-ipc-3m">cargando…</div><div class="card-change">mensual</div></div>
+      <div class="card"><div class="card-lbl">Variación vs mes ant.</div><div class="card-val loading" id="v-ipc-var">cargando…</div><div class="card-change" id="c-ipc-var"></div></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-hdr"><span class="chart-ttl">IPC mensual · últimos 18 meses</span><span class="chart-src">INDEC / datos.gob.ar</span></div>
+      <div style="position:relative;width:100%;height:210px"><canvas id="chartIPC"></canvas></div>
+    </div>
+  </section>
+
+  <div class="status">
+    <span class="pulse" id="st-dot"></span>
+    <span id="st-msg">Iniciando…</span>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="f-brand">Argentina <span>en números</span></div>
+    <p>Datos actualizados automáticamente desde fuentes oficiales del gobierno argentino. Cifras provisorias sujetas a revisión.</p>
+  </div>
+  <div class="f-src">
+    Fuentes:<br>
+    <a href="https://www.bcra.gob.ar/apis-banco-central/" target="_blank">BCRA API</a> ·
+    <a href="https://apis.datos.gob.ar/series/api/" target="_blank">datos.gob.ar</a> ·
+    <a href="https://bluelytics.com.ar" target="_blank">Bluelytics</a>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const fmtM = n => {
+  if(n==null||isNaN(n)) return 'N/D';
+  const v=Number(n);
+  if(v>=1e12) return (v/1e12).toFixed(2)+' B';
+  if(v>=1e9)  return (v/1e9).toFixed(1)+' MM';
+  if(v>=1e6)  return (v/1e6).toFixed(0)+' M';
+  return v.toLocaleString('es-AR');
+};
+const fmtP   = n => (n==null||isNaN(n))?'N/D':Number(n).toFixed(1)+'%';
+const fmtARS = n => (n==null||isNaN(n))?'N/D':'$ '+Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0});
+const today  = () => new Date().toISOString().split('T')[0];
+const dAgo   = n => { const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().split('T')[0]; };
+const shortD = iso => { const [y,m,d]=(iso.split('T')[0]).split('-'); return d+'/'+m; };
+
+/* ── Proxy CORS ── */
+const proxy = url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+
+function setCard(valId, val, changeId, changeText, cls) {
+  const el=$(valId); if(!el) return;
+  const len=String(val).replace(/[^0-9,.%$\s]/g,'').length;
+  el.className='card-val'+(len>12?' xs':len>8?' sm':'');
+  el.textContent=val;
+  if(changeId&&changeText!==undefined){
+    const cel=$(changeId); if(!cel) return;
+    cel.textContent=changeText;
+    cel.className='card-change'+(cls?' '+cls:'');
+  }
+}
+
+/* Reloj */
+const tick=()=>{ $('nav-time').textContent=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' ART'; };
+setInterval(tick,1000); tick();
+
+/* Chart config */
+const CO={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},interaction:{mode:'index',intersect:false}};
+const sc=yFmt=>({
+  x:{ticks:{color:'#6b7a99',font:{size:10,family:'DM Mono'},maxRotation:45,autoSkip:true,maxTicksLimit:10},grid:{color:'rgba(255,255,255,0.04)'}},
+  y:{ticks:{color:'#6b7a99',font:{size:10,family:'DM Mono'},callback:yFmt},grid:{color:'rgba(255,255,255,0.05)'}}
+});
+
+let monChart=null, S={};
+
+async function getJSON(url){
+  try{
+    const r=await fetch(proxy(url),{signal:AbortSignal.timeout(12000)});
+    if(!r.ok) throw new Error(r.status);
+    return r.json();
+  }catch(e){return null;}
+}
+
+/* BCRA monetarias */
+const BMON='https://api.bcra.gob.ar/estadisticas/v3.0/monetarias';
+const bcraVar = async(id,days=95)=>{ const d=await getJSON(`${BMON}/${id}?desde=${dAgo(days)}&hasta=${today()}`); return d?.results||null; };
+const bcraPV  = async()=>{ const d=await getJSON(`${BMON}/principalesvariables`); return d?.results||null; };
+
+/* ── CAMBIARIO ── */
+async function loadCambio(){
+  const bl=await getJSON('https://api.bluelytics.com.ar/v2/latest');
+  if(bl){
+    const of=bl.oficial?.value_sell, blue=bl.blue?.value_sell;
+    const mep=bl.oficial_euro?.value_sell, ccl=bl.blue_euro?.value_sell;
+    if(of!=null)   setCard('v-usd-of',fmtARS(of),'c-usd-of','compra: '+fmtARS(bl.oficial?.value_buy));
+    if(blue!=null) setCard('v-usd-blue',fmtARS(blue),'c-usd-blue','compra: '+fmtARS(bl.blue?.value_buy));
+    if(of!=null&&blue!=null){
+      const b=((blue-of)/of*100);
+      setCard('v-brecha',b.toFixed(1)+'%','','','');
+      $('v-brecha').className='card-val'+(b>30?' pos':'');
+    }
+    if(mep!=null) setCard('v-mep',fmtARS(mep),'c-mep','venta');
+    if(ccl!=null) setCard('v-ccl',fmtARS(ccl),'c-ccl','venta');
+  }
+
+  /* Euro via BCRA cotizaciones */
+  const cot=await getJSON(`https://api.bcra.gob.ar/estadisticascambiarias/v1.0/Cotizaciones?fechaDesde=${dAgo(5)}&fechaHasta=${today()}&limit=5`);
+  if(cot?.results?.length){
+    const last=cot.results[cot.results.length-1];
+    const eur=last.detalle?.find(x=>x.codigoMoneda==='EUR');
+    if(eur) setCard('v-eur',fmtARS(eur.tipoPase||eur.tipoCotizacion));
+  }
+
+  /* Gráfico evolución dólar */
+  const evo=await getJSON('https://api.bluelytics.com.ar/v2/evolution.json');
+  if(evo?.length){
+    const pts=evo.filter(x=>x.source==='oficial').slice(-30);
+    new Chart($('chartUSD'),{
+      type:'line',
+      data:{labels:pts.map(x=>shortD(x.date)),datasets:[{data:pts.map(x=>x.value_sell),borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,0.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3}]},
+      options:{...CO,scales:sc(v=>'$'+Number(v).toLocaleString('es-AR'))}
+    });
+  }
+}
+
+/* ── MONETARIO ── */
+async function loadMonetario(){
+  const [pv,bm,circ,res,dep,pf,prest]=await Promise.all([
+    bcraPV(), bcraVar(15), bcraVar(16), bcraVar(1), bcraVar(43), bcraVar(46), bcraVar(25)
+  ]);
+  S={bm,circ,res,dep,pf,prest};
+
+  if(pv){ const m={}; pv.forEach(v=>m[v.idVariable]=v.valor); if(m[6]!=null) setCard('v-tasa',fmtP(m[6])); }
+
+  function applyCard(vId,cId,arr,invert=false){
+    if(!arr?.length) return;
+    const l=arr[arr.length-1].valor, p=arr.length>22?arr[arr.length-22].valor:null;
+    const vm=p!=null?((l-p)/p*100):null;
+    setCard(vId,fmtM(l),cId,vm!=null?(vm>=0?'+':'')+vm.toFixed(1)+'% mensual',vm==null?'':(!invert?vm>0:'pos')===true?'pos':'neg');
+  }
+  applyCard('v-bm','c-bm',bm);
+  applyCard('v-circ','c-circ',circ);
+  applyCard('v-dep','c-dep',dep);
+  applyCard('v-pf','c-pf',pf);
+  applyCard('v-prest','c-prest',prest);
+  if(res?.length){
+    const l=res[res.length-1].valor, p=res.length>22?res[res.length-22].valor:null;
+    const vm=p!=null?((l-p)/p*100):null;
+    setCard('v-res','USD '+fmtM(l),'c-res',vm!=null?(vm>=0?'+':'')+vm.toFixed(1)+'% mensual', vm==null?'':vm<0?'neg':'pos');
+  }
+
+  buildMonChart('bm');
+
+  if(bm?.length>30){
+    const byM={}; bm.forEach(x=>{byM[x.fecha.slice(0,7)]=x.valor;});
+    const meses=Object.keys(byM).sort().slice(-13);
+    const labels=[],vals=[];
+    for(let i=1;i<meses.length;i++){
+      const p=byM[meses[i-1]],c=byM[meses[i]];
+      if(p&&c){labels.push(meses[i].slice(5)+'/'+meses[i].slice(2,4));vals.push(((c-p)/p)*100);}
+    }
+    if(labels.length){
+      new Chart($('chartBMVar'),{
+        type:'bar',
+        data:{labels,datasets:[{data:vals,backgroundColor:vals.map(v=>v>=0?'rgba(74,240,176,.75)':'rgba(255,107,107,.75)'),borderRadius:3}]},
+        options:{...CO,scales:sc(v=>v.toFixed(1)+'%')}
+      });
+    }
+  }
+}
+
+function buildMonChart(mode){
+  if(monChart){monChart.destroy();monChart=null;}
+  const leg=$('mon-legend');
+  let labels,ds=[],html='';
+  if(mode==='bm'&&S.bm&&S.circ){
+    labels=S.bm.map(x=>shortD(x.fecha));
+    ds=[
+      {label:'BM',data:S.bm.map(x=>x.valor),borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
+      {label:'Circ',data:S.circ.map(x=>x.valor),borderColor:'#3db8ff',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
+    ];
+    html='<span><span class="ldot" style="background:#4af0b0"></span>Base monetaria</span><span><span class="ldot" style="background:#3db8ff"></span>Circulante</span>';
+  } else if(mode==='res'&&S.res){
+    labels=S.res.map(x=>shortD(x.fecha));
+    ds=[{label:'Res',data:S.res.map(x=>x.valor),borderColor:'#f0b84a',backgroundColor:'rgba(240,184,74,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3}];
+    html='<span><span class="ldot" style="background:#f0b84a"></span>Reservas brutas (Mill. USD)</span>';
+  } else if(mode==='dep'&&S.dep&&S.pf){
+    labels=S.dep.map(x=>shortD(x.fecha));
+    ds=[
+      {label:'Dep',data:S.dep.map(x=>x.valor),borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
+      {label:'PF',data:S.pf.map(x=>x.valor),borderColor:'#3db8ff',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
+    ];
+    html='<span><span class="ldot" style="background:#4af0b0"></span>Depósitos totales</span><span><span class="ldot" style="background:#3db8ff"></span>Plazo fijo</span>';
+  } else return;
+  if(leg) leg.innerHTML=html;
+  monChart=new Chart($('chartMon'),{type:'line',data:{labels,datasets:ds},options:{...CO,scales:sc(fmtM)}});
+}
+
+window.switchMon=function(mode,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  buildMonChart(mode);
+};
+
+/* ── IPC ── */
+async function loadIPC(){
+  const d=await getJSON('https://apis.datos.gob.ar/series/api/series/?ids=148.3_INIVELGENE_DICI_M_26&limit=19&sort=desc&format=json');
+  if(!d?.data?.length) return;
+  const rows=d.data.slice(0,19).reverse();
+  const last=rows[rows.length-1][1], prev=rows[rows.length-2]?.[1];
+  const avg3=rows.slice(-3).map(r=>r[1]).reduce((a,b)=>a+b,0)/3;
+  const varP=prev!=null?last-prev:null;
+  const ia=rows.slice(-12).reduce((acc,r)=>acc*(1+r[1]/100),1);
+  $('hero-ipc').textContent=fmtP(last);
+  setCard('v-ipc',fmtP(last),'c-ipc',rows[rows.length-1][0].slice(0,7));
+  setCard('v-ipc-ia',fmtP((ia-1)*100));
+  setCard('v-ipc-3m',fmtP(avg3));
+  if(varP!=null) setCard('v-ipc-var',(varP>=0?'+':'')+varP.toFixed(2)+' pp','c-ipc-var','vs mes anterior',varP<0?'neg':'pos');
+  const labels=rows.slice(-18).map(r=>{const p=r[0].split('-');return p[1]+'/'+p[0].slice(2);});
+  const vals=rows.slice(-18).map(r=>r[1]);
+  new Chart($('chartIPC'),{
+    type:'bar',
+    data:{labels,datasets:[{data:vals,backgroundColor:vals.map(v=>v>10?'rgba(255,107,107,.75)':v>5?'rgba(240,184,74,.75)':'rgba(74,240,176,.75)'),borderRadius:3}]},
+    options:{...CO,scales:sc(v=>v.toFixed(1)+'%')}
+  });
+}
+
+/* ── MAIN ── */
+async function main(){
+  $('st-msg').textContent='Conectando con APIs…';
+  const results=await Promise.allSettled([loadCambio(),loadMonetario(),loadIPC()]);
+  const failed=results.filter(r=>r.status==='rejected').length;
+  $('st-dot').className='pulse'+(failed>0?' warn':'');
+  $('st-msg').textContent=failed===0
+    ?'Datos actualizados al '+new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' · BCRA · INDEC · Bluelytics'
+    :'Algunos datos no disponibles — reintentá en unos segundos';
+}
+main();
+</script>
+</body>
+</html>
