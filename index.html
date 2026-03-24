@@ -203,6 +203,27 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
       </div>
       <div style="position:relative;width:100%;height:220px"><canvas id="chartBank"></canvas></div>
     </div>
+
+    <div style="margin-top:1.5rem">
+      <div class="sec-hdr" style="margin-bottom:.75rem">
+        <span style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Calidad de cartera · Sistema Financiero</span>
+        <span class="sec-src">bcra.gob.ar</span>
+      </div>
+      <div class="grid g3">
+        <div class="card"><div class="card-lbl">C2 · Pérdida potencial sit. 2 a 5</div><div class="card-val loading" id="v-c2">cargando…</div><div class="card-change" id="c-c2"></div></div>
+        <div class="card"><div class="card-lbl">C3 · Pérdida potencial sit. 3 a 5</div><div class="card-val loading" id="v-c3">cargando…</div><div class="card-change" id="c-c3"></div></div>
+        <div class="card"><div class="card-lbl">A11 · Cartera irregular priv.</div><div class="card-val loading" id="v-a11">cargando…</div><div class="card-change" id="c-a11"></div></div>
+      </div>
+      <div class="chart-box" style="margin-top:8px">
+        <div class="chart-hdr"><span class="chart-ttl">Calidad de cartera · evolución</span><span class="chart-src">bcra.gob.ar · Sistema Financiero</span></div>
+        <div class="legend">
+          <span><span class="ldot" style="background:#ff6b6b"></span>C2 Pérdida potencial sit. 2-5</span>
+          <span><span class="ldot" style="background:#f0b84a"></span>C3 Pérdida potencial sit. 3-5</span>
+          <span><span class="ldot" style="background:#3db8ff"></span>A11 Cartera irregular priv.</span>
+        </div>
+        <div style="position:relative;width:100%;height:220px"><canvas id="chartCalidad"></canvas></div>
+      </div>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -594,6 +615,60 @@ window.switchBank = function(mode, btn) {
   buildBankChart(mode);
 };
 
+/* ── CALIDAD DE CARTERA (BCRA entidades) ── */
+function loadCalidadCartera() {
+  return safeGet('/api/bcra-entidades?bco=AAA00', false).then(function(data) {
+    if (!data || !data.success) {
+      ['v-c2','v-c3','v-a11'].forEach(setError);
+      return;
+    }
+
+    var cols = data.columnas;
+    var labels = [cols.col1, cols.col2, cols.col3, cols.col4, cols.col5];
+
+    function findIndicador(seccion, codigo) {
+      return (data.secciones[seccion] || []).find(function(x) {
+        return x.in_titulo.startsWith(codigo + ' ');
+      });
+    }
+
+    var c2  = findIndicador('capital', 'C2');
+    var c3  = findIndicador('capital', 'C3');
+    var a11 = findIndicador('activos', 'A11');
+
+    function setCalidadCard(vId, cId, ind) {
+      if (!ind) { setError(vId); return; }
+      var val = ind.in_c5;
+      var prev = ind.in_c4;
+      var diff = (val - prev).toFixed(2);
+      var cls = val > prev ? 'pos' : 'neg';
+      setCard(vId, fmtP(val), cId, (diff >= 0 ? '+' : '') + diff + ' pp vs mes ant.', cls);
+    }
+
+    setCalidadCard('v-c2',  'c-c2',  c2);
+    setCalidadCard('v-c3',  'c-c3',  c3);
+    setCalidadCard('v-a11', 'c-a11', a11);
+
+    if (c2 && c3 && a11) {
+      var vals = function(ind) {
+        return [ind.in_c1, ind.in_c2, ind.in_c3, ind.in_c4, ind.in_c5];
+      };
+      new Chart($('chartCalidad'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {label:'C2', data:vals(c2),  borderColor:'#ff6b6b', backgroundColor:'rgba(255,107,107,.07)', borderWidth:2, pointRadius:3, fill:true,  tension:0.3},
+            {label:'C3', data:vals(c3),  borderColor:'#f0b84a', backgroundColor:'transparent',           borderWidth:1.5, pointRadius:3, fill:false, tension:0.3},
+            {label:'A11',data:vals(a11), borderColor:'#3db8ff', backgroundColor:'rgba(61,184,255,.07)',  borderWidth:2, pointRadius:3, fill:true,  tension:0.3}
+          ]
+        },
+        options: Object.assign({}, CO, {scales: sc(function(v){ return v.toFixed(1)+'%'; })})
+      });
+    }
+  });
+}
+
 /* ── IPC ── */
 function loadIPC() {
   return bcraGet('/inflacion_mensual_oficial').then(function(data) {
@@ -627,7 +702,7 @@ function main() {
   $('st-dot').className = 'pulse warn';
   $('st-msg').textContent = 'Conectando con APIs…';
   var t0 = Date.now();
-  Promise.all([loadCambio(), loadMonetario(), loadIPC()]).then(function() {
+  Promise.all([loadCambio(), loadMonetario(), loadIPC(), loadCalidadCartera()]).then(function() {
     var secs = ((Date.now()-t0)/1000).toFixed(1);
     $('st-dot').className = 'pulse';
     $('st-msg').textContent = 'Actualizado el '+new Date().toLocaleString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})+' ('+secs+'s) · BCRA · Bluelytics · DolarApi · ArgentinaDatos';
