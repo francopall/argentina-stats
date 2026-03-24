@@ -233,7 +233,10 @@ function safeGet(url, auth) {
     .catch(function() { return null; });
 }
 
-function bcraGet(path) { return safeGet(BCRA_BASE + path, true); }
+function bcraGet(path) {
+  var proxyUrl = 'https://argentina-stats-72znqndgo-francopallitto-gmailcoms-projects.vercel.app/api/bcra?path=' + path.replace('/', '');
+  return safeGet(proxyUrl, false);
+}
 
 /* ultimos N elementos de serie BCRA {d,v} */
 function lastN(arr, n) { return arr ? arr.slice(-n) : []; }
