@@ -234,7 +234,7 @@ function safeGet(url, auth) {
 }
 
 function bcraGet(path) {
-  var proxyUrl = 'https://argentina-stats.vercel.app/api/bcra?path=' + path.replace('/', '');
+  var proxyUrl = '/api/bcra?path=' + path.replace('/', '');
   return safeGet(proxyUrl, false);
 }
 
