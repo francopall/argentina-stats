@@ -8,8 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0a0e14;--bg2:#111720;--bg3:#182030;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8edf5;--muted:#6b7a99;--faint:#3a4660;--accent:#4af0b0;--accent2:#3db8ff;--danger:#ff6b6b;--warn:#f0b84a;--fd:'Fraunces',serif;--fm:'DM Mono',monospace}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--fm);font-size:13px;line-height:1.6}
 nav{position:sticky;top:0;z-index:100;background:rgba(10,14,20,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px}
 .nav-brand{font-family:var(--fd);font-size:17px;font-weight:600;color:var(--text);text-decoration:none}
@@ -43,28 +42,24 @@ nav{position:sticky;top:0;z-index:100;background:rgba(10,14,20,0.92);backdrop-fi
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent)}
 .card-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
 .card-val{font-family:var(--fd);font-size:24px;font-weight:600;color:var(--text);line-height:1.1}
-.card-val.sm{font-size:19px}
-.card-val.xs{font-size:15px}
+.card-val.sm{font-size:19px}.card-val.xs{font-size:15px}
 .card-val.loading{font-family:var(--fm);font-size:11px;color:var(--faint);font-weight:400;animation:blink 1.2s infinite}
 .card-val.error{font-family:var(--fm);font-size:11px;color:var(--danger);font-weight:400}
 @keyframes blink{0%,100%{opacity:.5}50%{opacity:1}}
 .card-change{font-size:11px;margin-top:3px;color:var(--muted)}
-.card-change.pos{color:var(--danger)}
-.card-change.neg{color:var(--accent)}
+.card-change.pos{color:var(--danger)}.card-change.neg{color:var(--accent)}
 .chart-box{background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;padding:1.1rem 1.1rem .9rem;margin-top:8px}
 .chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
 .chart-ttl{font-size:13px;font-weight:500;color:var(--text)}
 .chart-src{font-size:10px;color:var(--faint)}
 .tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
 .tab{font-size:10px;padding:3px 9px;border-radius:20px;border:0.5px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--fm);text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
-.tab:hover{color:var(--text)}
-.tab.active{background:var(--bg3);color:var(--accent);border-color:var(--accent)}
+.tab:hover{color:var(--text)}.tab.active{background:var(--bg3);color:var(--accent);border-color:var(--accent)}
 .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--muted);margin-bottom:8px}
 .legend span{display:flex;align-items:center;gap:4px}
 .ldot{width:8px;height:8px;border-radius:2px}
 .status{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--faint);padding:.75rem 0;border-top:0.5px solid var(--border);margin-top:1.5rem}
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
-.pulse.err{background:var(--danger);animation:none}
 .pulse.warn{background:var(--warn);animation:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 footer{border-top:0.5px solid var(--border);padding:2rem;max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
@@ -72,19 +67,15 @@ footer{border-top:0.5px solid var(--border);padding:2rem;max-width:900px;margin:
 .f-brand span{color:var(--accent)}
 footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
 .f-src{font-size:10px;color:var(--faint);text-align:right}
-.f-src a{color:var(--muted);text-decoration:none}
-.f-src a:hover{color:var(--accent)}
+.f-src a{color:var(--muted);text-decoration:none}.f-src a:hover{color:var(--accent)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .page>*{animation:fadeUp .4s ease both}
-.page>*:nth-child(1){animation-delay:.05s}
-.page>*:nth-child(2){animation-delay:.1s}
-.page>*:nth-child(3){animation-delay:.15s}
-.page>*:nth-child(4){animation-delay:.2s}
+.page>*:nth-child(1){animation-delay:.05s}.page>*:nth-child(2){animation-delay:.1s}
+.page>*:nth-child(3){animation-delay:.15s}.page>*:nth-child(4){animation-delay:.2s}
 .page>*:nth-child(5){animation-delay:.25s}
 </style>
 </head>
 <body>
-
 <nav>
   <a class="nav-brand" href="#">Argentina <span>en números</span></a>
   <div class="nav-links">
@@ -94,25 +85,22 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
   </div>
   <span class="nav-time" id="nav-time"></span>
 </nav>
-
 <div class="hero">
   <div>
     <div class="hero-eyebrow">Datos abiertos · actualización automática</div>
     <h1>Argentina<br><em>en números</em></h1>
-    <p class="hero-sub">Estadísticas económicas y financieras actualizadas en tiempo real desde BCRA, INDEC y Bluelytics.</p>
+    <p class="hero-sub">Estadísticas económicas y financieras actualizadas desde Bluelytics, INDEC y ArgentinaDatos.</p>
   </div>
   <div class="hero-meta">
     <div class="big" id="hero-ipc">—</div>
     <div class="lbl">inflación mensual</div>
   </div>
 </div>
-
 <div class="page">
-
   <section id="cambiario">
     <div class="sec-hdr">
       <h2 class="sec-title">Tipo de <em>cambio</em></h2>
-      <span class="sec-src">Bluelytics · ArgentinaDatos</span>
+      <span class="sec-src">Bluelytics · DolarApi</span>
     </div>
     <div class="grid g4">
       <div class="card"><div class="card-lbl">Dólar oficial (venta)</div><div class="card-val loading" id="v-usd-of">cargando…</div><div class="card-change" id="c-usd-of"></div></div>
@@ -123,7 +111,7 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
     <div class="grid g3" style="margin-top:8px">
       <div class="card"><div class="card-lbl">Dólar CCL</div><div class="card-val loading" id="v-ccl">cargando…</div><div class="card-change" id="c-ccl"></div></div>
       <div class="card"><div class="card-lbl">Euro (venta)</div><div class="card-val loading" id="v-eur">cargando…</div><div class="card-change" id="c-eur"></div></div>
-      <div class="card"><div class="card-lbl">Real brasileño</div><div class="card-val loading" id="v-brl">cargando…</div><div class="card-change" id="c-brl"></div></div>
+      <div class="card"><div class="card-lbl">Riesgo país</div><div class="card-val loading" id="v-rp">cargando…</div><div class="card-change">puntos básicos</div></div>
     </div>
     <div class="chart-box">
       <div class="chart-hdr"><span class="chart-ttl">Dólar oficial vs blue · últimos 30 días</span><span class="chart-src">Bluelytics</span></div>
@@ -134,50 +122,32 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
       <div style="position:relative;width:100%;height:200px"><canvas id="chartUSD"></canvas></div>
     </div>
   </section>
-
   <div class="divider"></div>
-
   <section id="monetario">
     <div class="sec-hdr">
-      <h2 class="sec-title">Base <em>monetaria</em></h2>
-      <span class="sec-src">datos.gob.ar · INDEC</span>
+      <h2 class="sec-title">Variables <em>monetarias</em></h2>
+      <span class="sec-src">ArgentinaDatos · Bluelytics</span>
     </div>
     <div class="grid g4">
-      <div class="card"><div class="card-lbl">Base monetaria</div><div class="card-val loading sm" id="v-bm">cargando…</div><div class="card-change" id="c-bm"></div></div>
-      <div class="card"><div class="card-lbl">Circulante público</div><div class="card-val loading sm" id="v-circ">cargando…</div><div class="card-change" id="c-circ"></div></div>
-      <div class="card"><div class="card-lbl">Reservas internacionales</div><div class="card-val loading sm" id="v-res">cargando…</div><div class="card-change" id="c-res"></div></div>
       <div class="card"><div class="card-lbl">Tasa plazo fijo (TNA)</div><div class="card-val loading" id="v-tasa">cargando…</div><div class="card-change">promedio bancos</div></div>
-    </div>
-    <div class="grid g3" style="margin-top:8px">
-      <div class="card"><div class="card-lbl">Depósitos sector priv.</div><div class="card-val loading xs" id="v-dep">cargando…</div><div class="card-change" id="c-dep"></div></div>
-      <div class="card"><div class="card-lbl">Préstamos sector priv.</div><div class="card-val loading xs" id="v-prest">cargando…</div><div class="card-change" id="c-prest"></div></div>
-      <div class="card"><div class="card-lbl">Ratio préstamos/depósitos</div><div class="card-val loading" id="v-ratio">cargando…</div><div class="card-change">intermediación</div></div>
+      <div class="card"><div class="card-lbl">Depósitos a 30 días</div><div class="card-val loading" id="v-dep30">cargando…</div><div class="card-change" id="c-dep30"></div></div>
+      <div class="card"><div class="card-lbl">Dólar mayorista</div><div class="card-val loading" id="v-may">cargando…</div><div class="card-change" id="c-may"></div></div>
+      <div class="card"><div class="card-lbl">Dólar tarjeta</div><div class="card-val loading" id="v-tarj">cargando…</div><div class="card-change" id="c-tarj"></div></div>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr"><span class="chart-ttl">Variables monetarias · últimos 90 días</span><span class="chart-src">datos.gob.ar</span></div>
-      <div class="tabs">
-        <button class="tab active" onclick="switchMon('bm', this)">Base monetaria</button>
-        <button class="tab" onclick="switchMon('res', this)">Reservas</button>
-        <button class="tab" onclick="switchMon('dep', this)">Depósitos</button>
-      </div>
-      <div class="legend" id="mon-legend">
-        <span><span class="ldot" style="background:#4af0b0"></span>Base monetaria</span>
-        <span><span class="ldot" style="background:#3db8ff"></span>Circulante</span>
-      </div>
-      <div style="position:relative;width:100%;height:210px"><canvas id="chartMon"></canvas></div>
+      <div class="chart-hdr"><span class="chart-ttl">Inflación mensual · últimos 24 meses</span><span class="chart-src">ArgentinaDatos · INDEC</span></div>
+      <div style="position:relative;width:100%;height:210px"><canvas id="chartIPC2"></canvas></div>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr"><span class="chart-ttl">Variación mensual base monetaria</span><span class="chart-src">datos.gob.ar · últimos 12 meses</span></div>
-      <div style="position:relative;width:100%;height:175px"><canvas id="chartBMVar"></canvas></div>
+      <div class="chart-hdr"><span class="chart-ttl">Evolución dólar blue · últimos 60 días</span><span class="chart-src">Bluelytics</span></div>
+      <div style="position:relative;width:100%;height:175px"><canvas id="chartBlue"></canvas></div>
     </div>
   </section>
-
   <div class="divider"></div>
-
   <section id="precios">
     <div class="sec-hdr">
       <h2 class="sec-title">Inflación y <em>precios</em></h2>
-      <span class="sec-src">INDEC · datos.gob.ar</span>
+      <span class="sec-src">ArgentinaDatos · INDEC</span>
     </div>
     <div class="grid g4">
       <div class="card"><div class="card-lbl">IPC mensual (últ. dato)</div><div class="card-val loading" id="v-ipc">cargando…</div><div class="card-change" id="c-ipc"></div></div>
@@ -186,42 +156,30 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
       <div class="card"><div class="card-lbl">Variación vs mes ant.</div><div class="card-val loading" id="v-ipc-var">cargando…</div><div class="card-change" id="c-ipc-var"></div></div>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr"><span class="chart-ttl">IPC mensual · últimos 18 meses</span><span class="chart-src">INDEC / datos.gob.ar</span></div>
+      <div class="chart-hdr"><span class="chart-ttl">IPC mensual · últimos 18 meses</span><span class="chart-src">ArgentinaDatos / INDEC</span></div>
       <div style="position:relative;width:100%;height:210px"><canvas id="chartIPC"></canvas></div>
     </div>
   </section>
-
   <div class="status">
     <span class="pulse" id="st-dot"></span>
     <span id="st-msg">Iniciando…</span>
   </div>
 </div>
-
 <footer>
   <div>
     <div class="f-brand">Argentina <span>en números</span></div>
-    <p>Datos actualizados automáticamente desde fuentes oficiales. Cifras provisorias sujetas a revisión.</p>
+    <p>Datos actualizados automáticamente. Cifras provisorias sujetas a revisión.</p>
   </div>
   <div class="f-src">
     Fuentes:<br>
     <a href="https://bluelytics.com.ar" target="_blank">Bluelytics</a> ·
-    <a href="https://apis.datos.gob.ar/series/api/" target="_blank">datos.gob.ar</a> ·
+    <a href="https://dolarapi.com" target="_blank">DolarApi</a> ·
     <a href="https://argentinadatos.com" target="_blank">ArgentinaDatos</a>
   </div>
 </footer>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 var $ = function(id) { return document.getElementById(id); };
-
-function fmtM(n) {
-  if (n == null || isNaN(n)) return 'N/D';
-  var v = Number(n);
-  if (v >= 1e12) return (v / 1e12).toFixed(2) + ' B';
-  if (v >= 1e9)  return (v / 1e9).toFixed(1) + ' MM';
-  if (v >= 1e6)  return (v / 1e6).toFixed(0) + ' M';
-  return v.toLocaleString('es-AR');
-}
 
 function fmtP(n) {
   if (n == null || isNaN(n)) return 'N/D';
@@ -233,29 +191,26 @@ function fmtARS(n) {
   return '$ ' + Number(n).toLocaleString('es-AR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
 }
 
-function today() {
-  return new Date().toISOString().split('T')[0];
+function fmtNum(n) {
+  if (n == null || isNaN(n)) return 'N/D';
+  return Number(n).toLocaleString('es-AR');
 }
 
-function shortD(iso) {
-  var p = iso.split('T')[0].split('-');
+function shortD(str) {
+  var p = str.split('T')[0].split('-');
   return p[2] + '/' + p[1];
 }
 
 function safeGet(url) {
   return fetch(url, {signal: AbortSignal.timeout(12000)})
-    .then(function(r) {
-      if (!r.ok) return null;
-      return r.json();
-    })
+    .then(function(r) { if (!r.ok) return null; return r.json(); })
     .catch(function() { return null; });
 }
 
 function setCard(valId, val, changeId, changeText, cls) {
   var el = $(valId);
   if (!el) return;
-  var len = String(val).replace(/[^0-9,.%$\s]/g, '').length;
-  el.className = 'card-val' + (len > 12 ? ' xs' : len > 8 ? ' sm' : '');
+  el.className = 'card-val';
   el.textContent = val;
   if (changeId && changeText !== undefined) {
     var cel = $(changeId);
@@ -272,16 +227,6 @@ function setError(valId) {
   el.textContent = 'sin datos';
 }
 
-/* Reloj */
-function tick() {
-  $('nav-time').textContent = new Date().toLocaleTimeString('es-AR', {
-    hour: '2-digit', minute: '2-digit', second: '2-digit'
-  }) + ' ART';
-}
-setInterval(tick, 1000);
-tick();
-
-/* Chart config */
 var CO = {
   responsive: true,
   maintainAspectRatio: false,
@@ -291,274 +236,158 @@ var CO = {
 
 function makeScales(yFmt) {
   return {
-    x: {
-      ticks: {color: '#6b7a99', font: {size: 10, family: 'DM Mono'}, maxRotation: 45, autoSkip: true, maxTicksLimit: 10},
-      grid: {color: 'rgba(255,255,255,0.04)'}
-    },
-    y: {
-      ticks: {color: '#6b7a99', font: {size: 10, family: 'DM Mono'}, callback: yFmt},
-      grid: {color: 'rgba(255,255,255,0.05)'}
-    }
+    x: {ticks: {color: '#6b7a99', font: {size: 10, family: 'DM Mono'}, maxRotation: 45, autoSkip: true, maxTicksLimit: 10}, grid: {color: 'rgba(255,255,255,0.04)'}},
+    y: {ticks: {color: '#6b7a99', font: {size: 10, family: 'DM Mono'}, callback: yFmt}, grid: {color: 'rgba(255,255,255,0.05)'}}
   };
 }
 
-var monChart = null;
-var S = {};
+function tick() {
+  $('nav-time').textContent = new Date().toLocaleTimeString('es-AR', {hour: '2-digit', minute: '2-digit', second: '2-digit'}) + ' ART';
+}
+setInterval(tick, 1000);
+tick();
 
 /* ── CAMBIARIO ── */
 function loadCambio() {
-  return safeGet('https://api.bluelytics.com.ar/v2/latest').then(function(bl) {
-    if (bl) {
-      var of = bl.oficial && bl.oficial.value_sell;
-      var blue = bl.blue && bl.blue.value_sell;
-      var mep = bl.oficial_euro && bl.oficial_euro.value_sell;
-      var ccl = bl.blue_euro && bl.blue_euro.value_sell;
-      if (of != null) setCard('v-usd-of', fmtARS(of), 'c-usd-of', 'compra: ' + fmtARS(bl.oficial.value_buy));
-      else setError('v-usd-of');
-      if (blue != null) setCard('v-usd-blue', fmtARS(blue), 'c-usd-blue', 'compra: ' + fmtARS(bl.blue.value_buy));
-      else setError('v-usd-blue');
-      if (of && blue) {
-        var b = (blue - of) / of * 100;
-        var bEl = $('v-brecha');
-        bEl.className = 'card-val' + (b > 30 ? ' pos' : '');
-        bEl.textContent = b.toFixed(1) + '%';
-      } else setError('v-brecha');
-      if (mep != null) setCard('v-mep', fmtARS(mep), 'c-mep', 'venta');
-      else setError('v-mep');
-      if (ccl != null) setCard('v-ccl', fmtARS(ccl), 'c-ccl', 'venta');
-      else setError('v-ccl');
-    } else {
-      ['v-usd-of', 'v-usd-blue', 'v-brecha', 'v-mep', 'v-ccl'].forEach(setError);
+  var p1 = safeGet('https://api.bluelytics.com.ar/v2/latest').then(function(bl) {
+    if (!bl) { ['v-usd-of','v-usd-blue','v-brecha','v-mep','v-ccl'].forEach(setError); return; }
+    var of = bl.oficial && bl.oficial.value_sell;
+    var blue = bl.blue && bl.blue.value_sell;
+    var mep = bl.oficial_euro && bl.oficial_euro.value_sell;
+    var ccl = bl.blue_euro && bl.blue_euro.value_sell;
+    if (of != null) setCard('v-usd-of', fmtARS(of), 'c-usd-of', 'compra: ' + fmtARS(bl.oficial.value_buy));
+    else setError('v-usd-of');
+    if (blue != null) setCard('v-usd-blue', fmtARS(blue), 'c-usd-blue', 'compra: ' + fmtARS(bl.blue.value_buy));
+    else setError('v-usd-blue');
+    if (of && blue) {
+      var b = (blue - of) / of * 100;
+      var bEl = $('v-brecha');
+      bEl.className = 'card-val';
+      bEl.textContent = b.toFixed(1) + '%';
+    } else setError('v-brecha');
+    if (mep != null) setCard('v-mep', fmtARS(mep), 'c-mep', 'venta');
+    else setError('v-mep');
+    if (ccl != null) setCard('v-ccl', fmtARS(ccl), 'c-ccl', 'venta');
+    else setError('v-ccl');
+  });
+
+  var p2 = safeGet('https://dolarapi.com/v1/dolares').then(function(ds) {
+    if (!ds || !Array.isArray(ds)) { setError('v-eur'); return; }
+    var eur = null;
+    var may = null;
+    var tarj = null;
+    for (var i = 0; i < ds.length; i++) {
+      var casa = (ds[i].casa || '').toLowerCase();
+      if (casa === 'euro' || casa === 'eur') eur = ds[i];
+      if (casa === 'mayorista') may = ds[i];
+      if (casa === 'tarjeta' || casa === 'cripto') tarj = ds[i];
     }
-  }).then(function() {
-    return safeGet('https://api.argentinadatos.com/v1/cotizaciones/dolares');
-  }).then(function(cots) {
-    if (cots && Array.isArray(cots)) {
-      var eur = null;
-      var brl = null;
-      for (var i = 0; i < cots.length; i++) {
-        var c = cots[i];
-        var nombre = (c.nombre || c.casa || '').toLowerCase();
-        if (nombre.indexOf('euro') !== -1) eur = c;
-        if (nombre.indexOf('real') !== -1) brl = c;
-      }
-      if (eur && eur.venta) setCard('v-eur', fmtARS(eur.venta), 'c-eur', 'compra: ' + fmtARS(eur.compra));
-      else setError('v-eur');
-      if (brl && brl.venta) setCard('v-brl', fmtARS(brl.venta), 'c-brl', 'compra: ' + fmtARS(brl.compra));
-      else setError('v-brl');
-    } else {
-      setError('v-eur');
-      setError('v-brl');
-    }
-  }).then(function() {
-    return safeGet('https://api.bluelytics.com.ar/v2/evolution.json');
-  }).then(function(evo) {
+    if (eur && eur.venta) setCard('v-eur', fmtARS(eur.venta), 'c-eur', 'compra: ' + fmtARS(eur.compra));
+    else setError('v-eur');
+    if (may && may.venta) setCard('v-may', fmtARS(may.venta), 'c-may', 'compra: ' + fmtARS(may.compra));
+    else setError('v-may');
+    if (tarj && tarj.venta) setCard('v-tarj', fmtARS(tarj.venta), 'c-tarj', 'con recargos');
+    else setError('v-tarj');
+  });
+
+  var p3 = safeGet('https://api.argentinadatos.com/v1/finanzas/indices/riesgo-pais/ultimo').then(function(rp) {
+    if (rp && rp.valor != null) setCard('v-rp', fmtNum(rp.valor), '', '');
+    else setError('v-rp');
+  });
+
+  var p4 = safeGet('https://api.bluelytics.com.ar/v2/evolution.json').then(function(evo) {
     if (!evo || !evo.length) return;
-    var of30 = evo.filter(function(x) { return x.source === 'oficial'; }).slice(-30);
-    var bl30 = evo.filter(function(x) { return x.source === 'blue'; }).slice(-30);
-    var labels = of30.map(function(x) { return shortD(x.date); });
+    var of60 = evo.filter(function(x) { return x.source === 'oficial'; }).slice(-30);
+    var bl60 = evo.filter(function(x) { return x.source === 'blue'; }).slice(-30);
+    var labels = of60.map(function(x) { return shortD(x.date); });
     new Chart($('chartUSD'), {
       type: 'line',
       data: {
         labels: labels,
         datasets: [
-          {label: 'Oficial', data: of30.map(function(x) { return x.value_sell; }), borderColor: '#4af0b0', backgroundColor: 'rgba(74,240,176,0.07)', borderWidth: 2, pointRadius: 0, fill: true, tension: 0.3},
-          {label: 'Blue',    data: bl30.map(function(x) { return x.value_sell; }), borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,0.05)', borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0.3}
+          {label: 'Oficial', data: of60.map(function(x) { return x.value_sell; }), borderColor: '#4af0b0', backgroundColor: 'rgba(74,240,176,0.07)', borderWidth: 2, pointRadius: 0, fill: true, tension: 0.3},
+          {label: 'Blue', data: bl60.map(function(x) { return x.value_sell; }), borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,0.05)', borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0.3}
         ]
       },
       options: Object.assign({}, CO, {scales: makeScales(function(v) { return '$' + Number(v).toLocaleString('es-AR'); })})
     });
+
+    var bl60data = evo.filter(function(x) { return x.source === 'blue'; }).slice(-60);
+    new Chart($('chartBlue'), {
+      type: 'line',
+      data: {
+        labels: bl60data.map(function(x) { return shortD(x.date); }),
+        datasets: [{label: 'Blue', data: bl60data.map(function(x) { return x.value_sell; }), borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,0.07)', borderWidth: 2, pointRadius: 0, fill: true, tension: 0.3}]
+      },
+      options: Object.assign({}, CO, {scales: makeScales(function(v) { return '$' + Number(v).toLocaleString('es-AR'); })})
+    });
   });
+
+  return Promise.all([p1, p2, p3, p4]);
 }
 
 /* ── MONETARIO ── */
-function fetchSerie(id, limit) {
-  var lim = limit || 95;
-  var url = 'https://apis.datos.gob.ar/series/api/series/?ids=' + id + '&limit=' + lim + '&sort=asc&format=json';
-  return safeGet(url).then(function(d) {
-    if (!d || !d.data || !d.data.length) return null;
-    return d.data
-      .filter(function(r) { return r[1] != null; })
-      .map(function(r) { return {fecha: r[0], valor: r[1]}; });
-  });
-}
-
-function applyCard(vId, cId, arr) {
-  if (!arr || !arr.length) { setError(vId); return; }
-  var l = arr[arr.length - 1].valor;
-  var idx = arr.length > 25 ? arr.length - 22 : 0;
-  var pM = arr[idx] ? arr[idx].valor : null;
-  var vm = (pM != null && pM !== 0) ? ((l - pM) / pM * 100) : null;
-  var vmTxt = vm != null ? (vm >= 0 ? '+' : '') + vm.toFixed(1) + '% mensual' : 'último dato';
-  var vmCls = vm == null ? '' : (vm > 0 ? 'pos' : 'neg');
-  setCard(vId, fmtM(l), cId, vmTxt, vmCls);
-}
-
 function loadMonetario() {
-  return Promise.all([
-    fetchSerie('174.1_BM_TOTAL_0_M_33'),
-    fetchSerie('174.1_CIRCULANTE_0_M_40'),
-    fetchSerie('174.1_RESERVAS_0_M_33'),
-    fetchSerie('174.1_DEPOSITOS_PP_0_M_39'),
-    fetchSerie('174.1_PRESTAMOS_PP_0_M_39')
-  ]).then(function(results) {
-    var bm    = results[0];
-    var circ  = results[1];
-    var res   = results[2];
-    var dep   = results[3];
-    var prest = results[4];
-    S = {bm: bm, circ: circ, res: res, dep: dep, prest: prest};
-
-    applyCard('v-bm',    'c-bm',    bm);
-    applyCard('v-circ',  'c-circ',  circ);
-    applyCard('v-dep',   'c-dep',   dep);
-    applyCard('v-prest', 'c-prest', prest);
-
-    if (res && res.length) {
-      var l = res[res.length - 1].valor;
-      var idx = res.length > 25 ? res.length - 22 : 0;
-      var pM = res[idx] ? res[idx].valor : null;
-      var vm = (pM != null && pM !== 0) ? ((l - pM) / pM * 100) : null;
-      var vmTxt = vm != null ? (vm >= 0 ? '+' : '') + vm.toFixed(1) + '% mensual' : 'último dato';
-      var vmCls = vm == null ? '' : (vm < 0 ? 'pos' : 'neg');
-      setCard('v-res', 'USD ' + fmtM(l), 'c-res', vmTxt, vmCls);
-    } else {
-      setError('v-res');
-    }
-
-    if (dep && prest && dep.length && prest.length) {
-      var ratio = prest[prest.length - 1].valor / dep[dep.length - 1].valor * 100;
-      setCard('v-ratio', ratio.toFixed(1) + '%', '', '');
-    } else {
-      setError('v-ratio');
-    }
-
-    buildMonChart('bm');
-
-    if (bm && bm.length > 3) {
-      var byM = {};
-      bm.forEach(function(x) { byM[x.fecha.slice(0, 7)] = x.valor; });
-      var meses = Object.keys(byM).sort().slice(-13);
-      var labels = [];
-      var vals = [];
-      for (var i = 1; i < meses.length; i++) {
-        var p = byM[meses[i - 1]];
-        var c = byM[meses[i]];
-        if (p && c) {
-          labels.push(meses[i].slice(5) + '/' + meses[i].slice(2, 4));
-          vals.push((c - p) / p * 100);
-        }
-      }
-      if (labels.length) {
-        new Chart($('chartBMVar'), {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [{
-              data: vals,
-              backgroundColor: vals.map(function(v) { return v >= 0 ? 'rgba(74,240,176,.75)' : 'rgba(255,107,107,.75)'; }),
-              borderRadius: 3
-            }]
-          },
-          options: Object.assign({}, CO, {scales: makeScales(function(v) { return v.toFixed(1) + '%'; })})
-        });
-      }
-    }
-  }).then(function() {
-    return safeGet('https://api.argentinadatos.com/v1/finanzas/tasas/plazoFijo');
-  }).then(function(pf) {
-    if (pf && pf.tnaClientes) setCard('v-tasa', fmtP(pf.tnaClientes), '', '');
+  var p1 = safeGet('https://api.argentinadatos.com/v1/finanzas/tasas/plazoFijo').then(function(pf) {
+    if (pf && pf.tnaClientes != null) setCard('v-tasa', fmtP(pf.tnaClientes), '', '');
     else setError('v-tasa');
   });
-}
 
-function buildMonChart(mode) {
-  if (monChart) { monChart.destroy(); monChart = null; }
-  var leg = $('mon-legend');
-  var labels = [];
-  var ds = [];
-  var html = '';
-  if (mode === 'bm' && S.bm && S.circ) {
-    labels = S.bm.map(function(x) { return shortD(x.fecha); });
-    ds = [
-      {label: 'BM',   data: S.bm.map(function(x) { return x.valor; }),   borderColor: '#4af0b0', backgroundColor: 'rgba(74,240,176,.07)', borderWidth: 2,   pointRadius: 0, fill: true,  tension: 0.3},
-      {label: 'Circ', data: S.circ.map(function(x) { return x.valor; }), borderColor: '#3db8ff', backgroundColor: 'transparent',           borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0.3}
-    ];
-    html = '<span><span class="ldot" style="background:#4af0b0"></span>Base monetaria</span><span><span class="ldot" style="background:#3db8ff"></span>Circulante</span>';
-  } else if (mode === 'res' && S.res) {
-    labels = S.res.map(function(x) { return shortD(x.fecha); });
-    ds = [{label: 'Res', data: S.res.map(function(x) { return x.valor; }), borderColor: '#f0b84a', backgroundColor: 'rgba(240,184,74,.07)', borderWidth: 2, pointRadius: 0, fill: true, tension: 0.3}];
-    html = '<span><span class="ldot" style="background:#f0b84a"></span>Reservas (Mill. USD)</span>';
-  } else if (mode === 'dep' && S.dep && S.prest) {
-    labels = S.dep.map(function(x) { return shortD(x.fecha); });
-    ds = [
-      {label: 'Dep',   data: S.dep.map(function(x) { return x.valor; }),   borderColor: '#4af0b0', backgroundColor: 'rgba(74,240,176,.07)', borderWidth: 2,   pointRadius: 0, fill: true,  tension: 0.3},
-      {label: 'Prest', data: S.prest.map(function(x) { return x.valor; }), borderColor: '#3db8ff', backgroundColor: 'transparent',           borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0.3}
-    ];
-    html = '<span><span class="ldot" style="background:#4af0b0"></span>Depósitos</span><span><span class="ldot" style="background:#3db8ff"></span>Préstamos</span>';
-  } else {
-    return;
-  }
-  if (leg) leg.innerHTML = html;
-  monChart = new Chart($('chartMon'), {
-    type: 'line',
-    data: {labels: labels, datasets: ds},
-    options: Object.assign({}, CO, {scales: makeScales(fmtM)})
+  var p2 = safeGet('https://api.argentinadatos.com/v1/finanzas/tasas/depositos30Dias').then(function(d) {
+    if (d && Array.isArray(d) && d.length) {
+      var last = d[d.length - 1];
+      setCard('v-dep30', fmtP(last.valor), 'c-dep30', last.fecha ? last.fecha.slice(0, 7) : '');
+    } else setError('v-dep30');
   });
-}
 
-window.switchMon = function(mode, btn) {
-  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-  btn.classList.add('active');
-  buildMonChart(mode);
-};
+  return Promise.all([p1, p2]);
+}
 
 /* ── IPC ── */
 function loadIPC() {
-  return safeGet('https://apis.datos.gob.ar/series/api/series/?ids=148.3_INIVELGENE_DICI_M_26&limit=19&sort=desc&format=json')
-    .then(function(d) {
-      if (!d || !d.data || !d.data.length) {
-        ['v-ipc', 'v-ipc-ia', 'v-ipc-3m', 'v-ipc-var'].forEach(setError);
-        return;
-      }
-      var rows = d.data.slice(0, 19).reverse();
-      var last = rows[rows.length - 1][1];
-      var prev = rows.length >= 2 ? rows[rows.length - 2][1] : null;
-      var sum3 = 0;
-      for (var i = rows.length - 3; i < rows.length; i++) sum3 += rows[i][1];
-      var avg3 = sum3 / 3;
-      var varP = prev != null ? last - prev : null;
-      var ia = 1;
-      var slice12 = rows.slice(-12);
-      for (var j = 0; j < slice12.length; j++) ia *= (1 + slice12[j][1] / 100);
-      $('hero-ipc').textContent = fmtP(last);
-      setCard('v-ipc', fmtP(last), 'c-ipc', rows[rows.length - 1][0].slice(0, 7));
-      setCard('v-ipc-ia', fmtP((ia - 1) * 100), '', '');
-      setCard('v-ipc-3m', fmtP(avg3), '', '');
-      if (varP != null) {
-        var vpTxt = (varP >= 0 ? '+' : '') + varP.toFixed(2) + ' pp';
-        setCard('v-ipc-var', vpTxt, 'c-ipc-var', 'vs mes anterior', varP < 0 ? 'neg' : 'pos');
-      }
-      var labels = rows.slice(-18).map(function(r) {
-        var p = r[0].split('-');
-        return p[1] + '/' + p[0].slice(2);
-      });
-      var vals = rows.slice(-18).map(function(r) { return r[1]; });
-      new Chart($('chartIPC'), {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            data: vals,
-            backgroundColor: vals.map(function(v) {
-              return v > 10 ? 'rgba(255,107,107,.75)' : v > 5 ? 'rgba(240,184,74,.75)' : 'rgba(74,240,176,.75)';
-            }),
-            borderRadius: 3
-          }]
-        },
-        options: Object.assign({}, CO, {scales: makeScales(function(v) { return v.toFixed(1) + '%'; })})
-      });
+  return safeGet('https://api.argentinadatos.com/v1/finanzas/indices/inflacion').then(function(data) {
+    if (!data || !Array.isArray(data) || !data.length) {
+      ['v-ipc', 'v-ipc-ia', 'v-ipc-3m', 'v-ipc-var', 'v-ipc-ia'].forEach(setError);
+      return;
+    }
+    data.sort(function(a, b) { return a.fecha < b.fecha ? -1 : 1; });
+    var last = data[data.length - 1];
+    var prev = data.length >= 2 ? data[data.length - 2] : null;
+    var last3 = data.slice(-3);
+    var sum3 = 0;
+    for (var i = 0; i < last3.length; i++) sum3 += last3[i].valor;
+    var avg3 = sum3 / last3.length;
+    var varP = prev ? last.valor - prev.valor : null;
+    var ia = 1;
+    var sl12 = data.slice(-12);
+    for (var j = 0; j < sl12.length; j++) ia *= (1 + sl12[j].valor / 100);
+
+    $('hero-ipc').textContent = fmtP(last.valor);
+    setCard('v-ipc', fmtP(last.valor), 'c-ipc', last.fecha ? last.fecha.slice(0, 7) : '');
+    setCard('v-ipc-ia', fmtP((ia - 1) * 100), '', '');
+    setCard('v-ipc-3m', fmtP(avg3), '', '');
+    if (varP != null) {
+      setCard('v-ipc-var', (varP >= 0 ? '+' : '') + varP.toFixed(2) + ' pp', 'c-ipc-var', 'vs mes anterior', varP < 0 ? 'neg' : 'pos');
+    }
+
+    var slice18 = data.slice(-18);
+    var labels18 = slice18.map(function(r) { var p = r.fecha.split('-'); return p[1] + '/' + p[0].slice(2); });
+    var vals18 = slice18.map(function(r) { return r.valor; });
+    new Chart($('chartIPC'), {
+      type: 'bar',
+      data: {labels: labels18, datasets: [{data: vals18, backgroundColor: vals18.map(function(v) { return v > 10 ? 'rgba(255,107,107,.75)' : v > 5 ? 'rgba(240,184,74,.75)' : 'rgba(74,240,176,.75)'; }), borderRadius: 3}]},
+      options: Object.assign({}, CO, {scales: makeScales(function(v) { return v.toFixed(1) + '%'; })})
     });
+
+    var slice24 = data.slice(-24);
+    var labels24 = slice24.map(function(r) { var p = r.fecha.split('-'); return p[1] + '/' + p[0].slice(2); });
+    var vals24 = slice24.map(function(r) { return r.valor; });
+    new Chart($('chartIPC2'), {
+      type: 'bar',
+      data: {labels: labels24, datasets: [{data: vals24, backgroundColor: vals24.map(function(v) { return v > 10 ? 'rgba(255,107,107,.75)' : v > 5 ? 'rgba(240,184,74,.75)' : 'rgba(74,240,176,.75)'; }), borderRadius: 3}]},
+      options: Object.assign({}, CO, {scales: makeScales(function(v) { return v.toFixed(1) + '%'; })})
+    });
+  });
 }
 
 /* ── MAIN ── */
@@ -569,9 +398,7 @@ function main() {
   Promise.all([loadCambio(), loadMonetario(), loadIPC()]).then(function() {
     var secs = ((Date.now() - t0) / 1000).toFixed(1);
     $('st-dot').className = 'pulse';
-    $('st-msg').textContent = 'Actualizado el ' + new Date().toLocaleString('es-AR', {
-      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-    }) + ' (' + secs + 's) · Bluelytics · datos.gob.ar · ArgentinaDatos';
+    $('st-msg').textContent = 'Actualizado el ' + new Date().toLocaleString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'}) + ' (' + secs + 's) · Bluelytics · DolarApi · ArgentinaDatos';
   });
 }
 
