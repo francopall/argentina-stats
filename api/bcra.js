@@ -20,6 +20,11 @@ export default async function handler(req, res) {
     const upstream = await fetch('https://api.estadisticasbcra.com/' + path, {
       headers: { 'Authorization': 'BEARER ' + TOKEN }
     });
+    if (!upstream.ok) {
+      const text = await upstream.text();
+      res.status(upstream.status).json({ error: text });
+      return;
+    }
     const data = await upstream.json();
     res.setHeader('Cache-Control', 's-maxage=300');
     res.status(200).json(data);
