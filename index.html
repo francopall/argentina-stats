@@ -81,6 +81,7 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
   <div class="nav-links">
     <a href="#cambiario">Cambiario</a>
     <a href="#monetario">Monetario</a>
+    <a href="#bancos">Bancos</a>
     <a href="#precios">Precios</a>
   </div>
   <span class="nav-time" id="nav-time"></span>
@@ -167,6 +168,40 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
     <div class="chart-box">
       <div class="chart-hdr"><span class="chart-ttl">Variación interanual base monetaria</span><span class="chart-src">estadisticasbcra.com</span></div>
       <div style="position:relative;width:100%;height:175px"><canvas id="chartBMVar"></canvas></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BANCOS -->
+  <section id="bancos">
+    <div class="sec-hdr">
+      <h2 class="sec-title">Sistema <em>bancario</em></h2>
+      <span class="sec-src">estadisticasbcra.com · BCRA</span>
+    </div>
+    <div class="grid g4">
+      <div class="card"><div class="card-lbl">Depósitos totales</div><div class="card-val loading sm" id="v-ban-dep">cargando…</div><div class="card-change" id="c-ban-dep"></div></div>
+      <div class="card"><div class="card-lbl">Plazo fijo</div><div class="card-val loading sm" id="v-ban-pf">cargando…</div><div class="card-change" id="c-ban-pf"></div></div>
+      <div class="card"><div class="card-lbl">Préstamos totales</div><div class="card-val loading sm" id="v-ban-prest">cargando…</div><div class="card-change" id="c-ban-prest"></div></div>
+      <div class="card"><div class="card-lbl">Préstamos / Depósitos</div><div class="card-val loading" id="v-ban-pd">cargando…</div><div class="card-change">ratio intermediación</div></div>
+    </div>
+    <div class="grid g3" style="margin-top:8px">
+      <div class="card"><div class="card-lbl">Tasa BADLAR</div><div class="card-val loading" id="v-ban-badlar">cargando…</div><div class="card-change">TNA mayorista</div></div>
+      <div class="card"><div class="card-lbl">Tasa depósitos 30d</div><div class="card-val loading" id="v-ban-tasa30">cargando…</div><div class="card-change">TNA minorista</div></div>
+      <div class="card"><div class="card-lbl">Spread BADLAR − 30d</div><div class="card-val loading" id="v-ban-spread">cargando…</div><div class="card-change">diferencial de tasas</div></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-hdr"><span class="chart-ttl">Sistema bancario · últimos 90 días</span><span class="chart-src">estadisticasbcra.com</span></div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchBank('dep',this)">Depósitos</button>
+        <button class="tab" onclick="switchBank('prest',this)">Préstamos</button>
+        <button class="tab" onclick="switchBank('tasas',this)">Tasas</button>
+      </div>
+      <div class="legend" id="bank-legend">
+        <span><span class="ldot" style="background:#4af0b0"></span>Depósitos totales</span>
+        <span><span class="ldot" style="background:#3db8ff"></span>Plazo fijo</span>
+      </div>
+      <div style="position:relative;width:100%;height:220px"><canvas id="chartBank"></canvas></div>
     </div>
   </section>
 
@@ -409,6 +444,7 @@ function loadMonetario() {
     } else setError('v-bm-ia');
 
     buildMonChart('bm');
+    buildBancosSection();
 
     /* Gráfico variación interanual BM */
     if (bmVar && bmVar.length) {
@@ -473,9 +509,89 @@ function buildMonChart(mode) {
 }
 
 window.switchMon = function(mode, btn) {
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('#monetario .tab').forEach(function(t){t.classList.remove('active');});
   btn.classList.add('active');
   buildMonChart(mode);
+};
+
+/* ── BANCOS ── */
+var bankChart = null;
+
+function buildBancosSection() {
+  var dep=S.dep, pf=S.pf, prest=S.prest, badlar=S.badlar, tasa30=S.tasa30;
+
+  function applyBanCard(vId, cId, arr) {
+    if (!arr||!arr.length) { setError(vId); return; }
+    var l = lastVal(arr);
+    var vm = varMensual(arr);
+    var vmTxt = vm!=null ? (vm>=0?'+':'')+vm.toFixed(1)+'% mensual' : '';
+    setCard(vId, fmtM(l), cId, vmTxt, vm==null?'':vm>0?'pos':'neg');
+  }
+
+  applyBanCard('v-ban-dep',   'c-ban-dep',   dep);
+  applyBanCard('v-ban-pf',    'c-ban-pf',    pf);
+  applyBanCard('v-ban-prest', 'c-ban-prest', prest);
+
+  if (prest&&prest.length&&dep&&dep.length) {
+    var pd = lastVal(prest)/lastVal(dep)*100;
+    setCard('v-ban-pd', pd.toFixed(1)+'%', '', '');
+  } else setError('v-ban-pd');
+
+  if (badlar&&badlar.length) setCard('v-ban-badlar', fmtP(lastVal(badlar)), '', '');
+  else setError('v-ban-badlar');
+
+  if (tasa30&&tasa30.length) setCard('v-ban-tasa30', fmtP(lastVal(tasa30)), '', '');
+  else setError('v-ban-tasa30');
+
+  if (badlar&&badlar.length&&tasa30&&tasa30.length) {
+    var spread = lastVal(badlar) - lastVal(tasa30);
+    setCard('v-ban-spread', (spread>=0?'+':'')+spread.toFixed(1)+' pp', '', '');
+  } else setError('v-ban-spread');
+
+  buildBankChart('dep');
+}
+
+function buildBankChart(mode) {
+  if (bankChart) { bankChart.destroy(); bankChart=null; }
+  var leg = $('bank-legend');
+  var labels=[], ds=[], html='';
+
+  if (mode==='dep' && S.dep && S.pf) {
+    var slD = lastN(S.dep, 90);
+    var slPF = lastN(S.pf, 90);
+    labels = slD.map(function(x){return shortD(x.d);});
+    ds = [
+      {label:'Dep', data:slD.map(function(x){return x.v;}),  borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
+      {label:'PF',  data:slPF.map(function(x){return x.v;}), borderColor:'#3db8ff',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
+    ];
+    html='<span><span class="ldot" style="background:#4af0b0"></span>Depósitos totales</span><span><span class="ldot" style="background:#3db8ff"></span>Plazo fijo</span>';
+  } else if (mode==='prest' && S.prest) {
+    var slP = lastN(S.prest, 90);
+    labels = slP.map(function(x){return shortD(x.d);});
+    ds = [{label:'Prest',data:slP.map(function(x){return x.v;}),borderColor:'#f0b84a',backgroundColor:'rgba(240,184,74,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3}];
+    html='<span><span class="ldot" style="background:#f0b84a"></span>Préstamos totales</span>';
+  } else if (mode==='tasas' && S.badlar && S.tasa30) {
+    var slB = lastN(S.badlar, 90);
+    var slT = lastN(S.tasa30, 90);
+    labels = slB.map(function(x){return shortD(x.d);});
+    ds = [
+      {label:'BADLAR',data:slB.map(function(x){return x.v;}),borderColor:'#f0b84a',backgroundColor:'rgba(240,184,74,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
+      {label:'30d',   data:slT.map(function(x){return x.v;}),borderColor:'#3db8ff',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
+    ];
+    html='<span><span class="ldot" style="background:#f0b84a"></span>Tasa BADLAR</span><span><span class="ldot" style="background:#3db8ff"></span>Tasa depósitos 30d</span>';
+  } else return;
+
+  if (leg) leg.innerHTML = html;
+  bankChart = new Chart($('chartBank'), {
+    type:'line', data:{labels:labels, datasets:ds},
+    options:Object.assign({},CO,{scales:sc(mode==='tasas'?function(v){return v.toFixed(1)+'%';}:fmtM)})
+  });
+}
+
+window.switchBank = function(mode, btn) {
+  document.querySelectorAll('#bancos .tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  buildBankChart(mode);
 };
 
 /* ── IPC ── */
