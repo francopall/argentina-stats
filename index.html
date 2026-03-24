@@ -112,11 +112,11 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
     </div>
     <div class="grid g3" style="margin-top:8px">
       <div class="card"><div class="card-lbl">Dólar CCL</div><div class="card-val loading" id="v-ccl">cargando…</div><div class="card-change" id="c-ccl"></div></div>
-      <div class="card"><div class="card-lbl">Euro (venta)</div><div class="card-val loading" id="v-eur">cargando…</div><div class="card-change" id="c-eur"></div></div>
+      <div class="card"><div class="card-lbl">Var. USD interanual</div><div class="card-val loading" id="v-usd-ia">cargando…</div><div class="card-change">blue vs año anterior</div></div>
       <div class="card"><div class="card-lbl">Riesgo país</div><div class="card-val loading" id="v-rp">cargando…</div><div class="card-change">puntos básicos</div></div>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr"><span class="chart-ttl">Dólar oficial vs blue · últimos 30 días</span><span class="chart-src">Bluelytics</span></div>
+      <div class="chart-hdr"><span class="chart-ttl">Dólar oficial vs blue · últimos 30 días</span><span class="chart-src">estadisticasbcra.com</span></div>
       <div class="legend">
         <span><span class="ldot" style="background:#4af0b0"></span>Oficial</span>
         <span><span class="ldot" style="background:#ff6b6b"></span>Blue</span>
@@ -282,6 +282,7 @@ var monChart = null;
 
 /* ── CAMBIARIO ── */
 function loadCambio() {
+  /* Cotizaciones actuales: Bluelytics y DolarApi */
   var p1 = safeGet('https://api.bluelytics.com.ar/v2/latest', false).then(function(bl) {
     if (!bl) { ['v-usd-of','v-usd-blue','v-brecha','v-mep','v-ccl'].forEach(setError); return; }
     var of = bl.oficial && bl.oficial.value_sell;
@@ -301,34 +302,45 @@ function loadCambio() {
     if (ccl) setCard('v-ccl', fmtARS(ccl), 'c-ccl', 'venta'); else setError('v-ccl');
   });
 
-  var p2 = safeGet('https://dolarapi.com/v1/dolares', false).then(function(ds) {
-    if (!ds || !Array.isArray(ds)) { setError('v-eur'); return; }
-    var eur = null;
-    for (var i=0; i<ds.length; i++) { if ((ds[i].casa||'').toLowerCase()==='euro') { eur=ds[i]; break; } }
-    if (eur && eur.venta) setCard('v-eur', fmtARS(eur.venta), 'c-eur', 'compra: '+fmtARS(eur.compra));
-    else setError('v-eur');
-  });
-
-  var p3 = safeGet('https://api.argentinadatos.com/v1/finanzas/indices/riesgo-pais/ultimo', false).then(function(rp) {
+  /* Riesgo país */
+  var p2 = safeGet('https://api.argentinadatos.com/v1/finanzas/indices/riesgo-pais/ultimo', false).then(function(rp) {
     if (rp && rp.valor != null) setCard('v-rp', Number(rp.valor).toLocaleString('es-AR'), '', '');
     else setError('v-rp');
   });
 
-  var p4 = safeGet('https://api.bluelytics.com.ar/v2/evolution.json', false).then(function(evo) {
-    if (!evo || !evo.length) return;
-    var of30 = evo.filter(function(x){return x.source==='oficial';}).slice(-30);
-    var bl30 = evo.filter(function(x){return x.source==='blue';}).slice(-30);
+  /* Gráfico histórico oficial vs blue — token BCRA: /usd_of y /usd */
+  var p3 = Promise.all([bcraGet('/usd_of'), bcraGet('/usd')]).then(function(res) {
+    var ofSerie = res[0];
+    var blueSerie = res[1];
+    if (!ofSerie || !blueSerie) return;
+
+    /* últimos 30 días hábiles */
+    var of30   = lastN(ofSerie,   30);
+    var blue30 = lastN(blueSerie, 30);
+
     new Chart($('chartUSD'), {
-      type:'line',
-      data:{labels:of30.map(function(x){return shortD(x.date);}), datasets:[
-        {label:'Oficial',data:of30.map(function(x){return x.value_sell;}),borderColor:'#4af0b0',backgroundColor:'rgba(74,240,176,0.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.3},
-        {label:'Blue',   data:bl30.map(function(x){return x.value_sell;}),borderColor:'#ff6b6b',backgroundColor:'rgba(255,107,107,0.05)',borderWidth:1.5,pointRadius:0,fill:false,tension:0.3}
-      ]},
-      options: Object.assign({}, CO, {scales:sc(function(v){return '$'+Number(v).toLocaleString('es-AR');})})
+      type: 'line',
+      data: {
+        labels: of30.map(function(x){ return shortD(x.d); }),
+        datasets: [
+          {label:'Oficial', data:of30.map(function(x){return x.v;}),   borderColor:'#4af0b0', backgroundColor:'rgba(74,240,176,0.07)', borderWidth:2,   pointRadius:0, fill:true,  tension:0.3},
+          {label:'Blue',    data:blue30.map(function(x){return x.v;}), borderColor:'#ff6b6b', backgroundColor:'rgba(255,107,107,0.05)',borderWidth:1.5, pointRadius:0, fill:false, tension:0.3}
+        ]
+      },
+      options: Object.assign({}, CO, {scales: sc(function(v){ return '$'+Number(v).toLocaleString('es-AR'); })})
     });
+
+    /* Var interanual blue */
+    if (blueSerie.length > 250) {
+      var lv = lastVal(blueSerie);
+      var py = blueSerie[blueSerie.length - 250].v;
+      var via = py ? ((lv - py) / py * 100) : null;
+      if (via != null) setCard('v-usd-ia', fmtP(via), '', '', via > 0 ? 'pos' : 'neg');
+      else setError('v-usd-ia');
+    } else setError('v-usd-ia');
   });
 
-  return Promise.all([p1,p2,p3,p4]);
+  return Promise.all([p1, p2, p3]);
 }
 
 /* ── BASE MONETARIA (estadisticasbcra.com con TOKEN) ── */
