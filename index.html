@@ -132,7 +132,7 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
   <section id="monetario">
     <div class="sec-hdr">
       <h2 class="sec-title">Base <em>monetaria</em></h2>
-      <span class="sec-src">estadisticasbcra.com · BCRA</span>
+      <span class="sec-src">api.bcra.gob.ar · BCRA</span>
     </div>
     <div class="grid g4">
       <div class="card"><div class="card-lbl">Base monetaria</div><div class="card-val loading sm" id="v-bm">cargando…</div><div class="card-change" id="c-bm"></div></div>
@@ -177,7 +177,7 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
   <section id="bancos">
     <div class="sec-hdr">
       <h2 class="sec-title">Sistema <em>bancario</em></h2>
-      <span class="sec-src">estadisticasbcra.com · BCRA</span>
+      <span class="sec-src">api.bcra.gob.ar · BCRA</span>
     </div>
     <div class="grid g4">
       <div class="card"><div class="card-lbl">Depósitos totales</div><div class="card-val loading sm" id="v-ban-dep">cargando…</div><div class="card-change" id="c-ban-dep"></div></div>
@@ -294,6 +294,18 @@ function bcraGet(path) {
   return safeGet(proxyUrl, false);
 }
 
+/* BCRA API v4.0 — CORS abierto, sin proxy */
+var BCRA_V4 = 'https://api.bcra.gob.ar/estadisticas/v4.0/monetarias/';
+
+function bcraV4Get(id, desde, hasta, mult) {
+  var url = BCRA_V4 + id + '?desde=' + desde + '&hasta=' + hasta + '&limit=500';
+  return safeGet(url, false).then(function(data) {
+    if (!data || data.status !== 200 || !data.results || !data.results[0]) return null;
+    var detalle = data.results[0].detalle.slice().reverse(); /* asc por fecha */
+    return detalle.map(function(x) { return {d: x.fecha, v: x.valor * (mult || 1)}; });
+  });
+}
+
 /* ultimos N elementos de serie BCRA {d,v} */
 function lastN(arr, n) { return arr ? arr.slice(-n) : []; }
 function lastVal(arr) { return arr && arr.length ? arr[arr.length-1].v : null; }
@@ -402,42 +414,54 @@ function loadCambio() {
   return Promise.all([p1, p2, p3]);
 }
 
-/* ── BASE MONETARIA (estadisticasbcra.com con TOKEN) ── */
+/* ── BASE MONETARIA Y BANCOS (BCRA API v4.0) ── */
 function loadMonetario() {
+  var hasta = new Date().toISOString().slice(0,10);
+  /* 130 días calendario ≈ 90 días hábiles para gráficos */
+  var d130 = new Date(); d130.setDate(d130.getDate()-130);
+  var desde90 = d130.toISOString().slice(0,10);
+  /* 420 días para calcular variación interanual */
+  var d420 = new Date(); d420.setDate(d420.getDate()-420);
+  var desdeIA = d420.toISOString().slice(0,10);
+
   return Promise.all([
-    bcraGet('/base'),
-    bcraGet('/circulacion_monetaria'),
-    bcraGet('/reservas'),
-    bcraGet('/depositos'),
-    bcraGet('/plazo_fijo'),
-    bcraGet('/prestamos'),
-    bcraGet('/tasa_badlar'),
-    bcraGet('/tasa_depositos_30_dias'),
-    bcraGet('/var_base_monetaria_interanual')
+    bcraV4Get(15, desdeIA,  hasta, 1e6),  /* base monetaria (mill. ARS→ARS) */
+    bcraV4Get(16, desde90, hasta, 1e6),   /* circulación monetaria */
+    bcraV4Get(1,  desde90, hasta, 1),     /* reservas (mill. USD) */
+    bcraV4Get(21, desde90, hasta, 1e6),   /* depósitos totales */
+    bcraV4Get(24, desde90, hasta, 1e6),   /* plazo fijo */
+    bcraV4Get(26, desde90, hasta, 1e6),   /* préstamos sector privado */
+    bcraV4Get(7,  desde90, hasta, 1),     /* BADLAR (%) */
+    bcraV4Get(12, desde90, hasta, 1)      /* tasa depósitos 30d (%) */
   ]).then(function(res) {
-    var bm=res[0], circ=res[1], reservas=res[2], dep=res[3], pf=res[4], prest=res[5], badlar=res[6], tasa30=res[7], bmVar=res[8];
+    var bm=res[0], circ=res[1], reservas=res[2], dep=res[3], pf=res[4], prest=res[5], badlar=res[6], tasa30=res[7];
     S = {bm:bm, circ:circ, reservas:reservas, dep:dep, pf:pf, prest:prest, badlar:badlar, tasa30:tasa30};
 
-    function applyCard(vId, cId, arr, isMM) {
+    function lastDate(arr) {
+      if (!arr||!arr.length) return '';
+      var p = arr[arr.length-1].d.split('-'); return p[2]+'/'+p[1]+'/'+p[0];
+    }
+
+    function applyCard(vId, cId, arr) {
       if (!arr||!arr.length) { setError(vId); return; }
       var l = lastVal(arr);
       var vm = varMensual(arr);
-      var fmt = isMM ? fmtM : fmtP;
-      var vmTxt = vm!=null ? (vm>=0?'+':'')+vm.toFixed(1)+'% mensual' : '';
-      setCard(vId, isMM ? fmtM(l) : fmtP(l), cId, vmTxt, vm==null?'':vm>0?'pos':'neg');
+      var vmTxt = vm!=null ? (vm>=0?'+':'')+vm.toFixed(1)+'% mensual · '+lastDate(arr) : lastDate(arr);
+      setCard(vId, fmtM(l), cId, vmTxt, vm==null?'':vm>0?'pos':'neg');
     }
 
-    applyCard('v-bm',    'c-bm',    bm,    true);
-    applyCard('v-circ',  'c-circ',  circ,  true);
-    applyCard('v-dep',   'c-dep',   dep,   true);
-    applyCard('v-pf',    'c-pf',    pf,    true);
-    applyCard('v-prest', 'c-prest', prest, true);
+    applyCard('v-bm',    'c-bm',    bm);
+    applyCard('v-circ',  'c-circ',  circ);
+    applyCard('v-dep',   'c-dep',   dep);
+    applyCard('v-pf',    'c-pf',    pf);
+    applyCard('v-prest', 'c-prest', prest);
 
-    /* Reservas: caída es mala (rojo) */
+    /* Reservas: caída es mala → color invertido */
     if (reservas && reservas.length) {
       var lr = lastVal(reservas);
       var vmr = varMensual(reservas);
-      setCard('v-res', 'USD '+fmtM(lr*1e6), 'c-res', vmr!=null?(vmr>=0?'+':'')+vmr.toFixed(1)+'% mensual':'', vmr==null?'':vmr<0?'pos':'neg');
+      var resTxt = (vmr!=null?(vmr>=0?'+':'')+vmr.toFixed(1)+'% mensual · ':'')+lastDate(reservas);
+      setCard('v-res', 'USD '+fmtM(lr*1e6), 'c-res', resTxt, vmr==null?'':vmr<0?'pos':'neg');
     } else setError('v-res');
 
     /* Ratio BM/Reservas */
@@ -448,20 +472,28 @@ function loadMonetario() {
 
     /* Ratio préstamos/depósitos */
     if (prest && prest.length && dep && dep.length) {
-      var pd = lastVal(prest)/lastVal(dep)*100;
-      setCard('v-pd', pd.toFixed(1)+'%', '', '');
+      setCard('v-pd', (lastVal(prest)/lastVal(dep)*100).toFixed(1)+'%', '', '');
     } else setError('v-pd');
 
     /* Tasas */
-    if (badlar && badlar.length) setCard('v-badlar', fmtP(lastVal(badlar)), '', '');
+    if (badlar && badlar.length) setCard('v-badlar', fmtP(lastVal(badlar)), '', lastDate(badlar));
     else setError('v-badlar');
-    if (tasa30 && tasa30.length) setCard('v-tasa30', fmtP(lastVal(tasa30)), '', '');
+    if (tasa30 && tasa30.length) setCard('v-tasa30', fmtP(lastVal(tasa30)), '', lastDate(tasa30));
     else setError('v-tasa30');
 
-    /* Var BM interanual */
-    if (bmVar && bmVar.length) {
-      var lv = lastVal(bmVar);
-      setCard('v-bm-ia', fmtP(lv), '', '', lv>0?'pos':'neg');
+    /* Variación interanual BM calculada de la serie */
+    var bmVar = null;
+    if (bm && bm.length > 250) {
+      var bmLast = lastVal(bm);
+      var bmPrev = bm[bm.length-251].v;
+      var iaVal = bmPrev ? (bmLast-bmPrev)/bmPrev*100 : null;
+      if (iaVal!=null) setCard('v-bm-ia', fmtP(iaVal), '', 'vs mismo período año ant.', iaVal>0?'pos':'neg');
+      else setError('v-bm-ia');
+      /* Construir serie interanual de los últimos 90 puntos */
+      bmVar = [];
+      for (var i=251; i<bm.length; i++) {
+        if (bm[i-251].v) bmVar.push({d:bm[i].d, v:(bm[i].v-bm[i-251].v)/bm[i-251].v*100});
+      }
     } else setError('v-bm-ia');
 
     buildMonChart('bm');
@@ -469,12 +501,12 @@ function loadMonetario() {
 
     /* Gráfico variación interanual BM */
     if (bmVar && bmVar.length) {
-      var sl = lastN(bmVar, 24);
+      var slVar = lastN(bmVar, 90);
       new Chart($('chartBMVar'), {
         type:'bar',
-        data:{labels:sl.map(function(x){return shortD(x.d);}), datasets:[{
-          data:sl.map(function(x){return x.v;}),
-          backgroundColor:sl.map(function(x){return x.v>=0?'rgba(74,240,176,.75)':'rgba(255,107,107,.75)';}),
+        data:{labels:slVar.map(function(x){return shortD(x.d);}), datasets:[{
+          data:slVar.map(function(x){return x.v;}),
+          backgroundColor:slVar.map(function(x){return x.v>=0?'rgba(74,240,176,.75)':'rgba(255,107,107,.75)';}),
           borderRadius:3
         }]},
         options:Object.assign({},CO,{scales:sc(function(v){return v.toFixed(1)+'%';})})
