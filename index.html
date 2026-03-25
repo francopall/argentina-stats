@@ -232,7 +232,7 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
   <section id="precios">
     <div class="sec-hdr">
       <h2 class="sec-title">Inflación y <em>precios</em></h2>
-      <span class="sec-src">estadisticasbcra.com · INDEC</span>
+      <span class="sec-src">argentinadatos.com · INDEC</span>
     </div>
     <div class="grid g4">
       <div class="card"><div class="card-lbl">IPC mensual (últ. dato)</div><div class="card-val loading" id="v-ipc">cargando…</div><div class="card-change" id="c-ipc"></div></div>
@@ -701,10 +701,12 @@ function loadCalidadCartera() {
   });
 }
 
-/* ── IPC ── */
+/* ── IPC (ArgentinaDatos) ── */
 function loadIPC() {
-  return bcraGet('/inflacion_mensual_oficial').then(function(data) {
-    if (!data || !data.length) { ['v-ipc','v-ipc-ia','v-ipc-3m','v-ipc-var'].forEach(setError); return; }
+  return safeGet('https://api.argentinadatos.com/v1/finanzas/indices/inflacion', false).then(function(raw) {
+    if (!raw || !raw.length) { ['v-ipc','v-ipc-ia','v-ipc-3m','v-ipc-var'].forEach(setError); return; }
+    /* normalizar a {d, v} */
+    var data = raw.map(function(x){ return {d: x.fecha, v: x.valor}; });
     var last = data[data.length-1];
     var prev = data.length>=2 ? data[data.length-2] : null;
     var sl3  = data.slice(-3);
@@ -712,8 +714,9 @@ function loadIPC() {
     var varP = prev ? last.v - prev.v : null;
     var ia = data.slice(-12).reduce(function(acc,x){return acc*(1+x.v/100);},1);
 
+    var fechaLabel = last.d ? last.d.slice(0,7) : '';
     $('hero-ipc').textContent = fmtP(last.v);
-    setCard('v-ipc', fmtP(last.v), 'c-ipc', last.d ? last.d.slice(0,7) : '');
+    setCard('v-ipc', fmtP(last.v), 'c-ipc', fechaLabel);
     setCard('v-ipc-ia', fmtP((ia-1)*100), '', '');
     setCard('v-ipc-3m', fmtP(avg3), '', '');
     if (varP!=null) setCard('v-ipc-var', (varP>=0?'+':'')+varP.toFixed(2)+' pp', 'c-ipc-var', 'vs mes anterior', varP<0?'neg':'pos');
