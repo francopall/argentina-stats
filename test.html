@@ -86,16 +86,16 @@ tbody td:first-child{text-align:left;color:var(--muted);font-size:11px}
       <span class="sec-src">datos.energia.gob.ar · Cuenca Neuquina</span>
     </div>
     <div class="chart-box">
-      <div class="chart-hdr">
-        <span class="chart-ttl">Producción mensual · m³ totales</span>
-        <span class="chart-src">datos.energia.gob.ar</span>
-      </div>
-      <div class="legend">
-        <span><span class="ldot" style="background:#4af0b0"></span>Pampa Energía</span>
-        <span><span class="ldot" style="background:#3db8ff"></span>Vista Energy</span>
-        <span><span class="ldot" style="background:#f0b84a"></span>GeoPark</span>
-      </div>
-      <div style="position:relative;width:100%;height:260px"><canvas id="chartPetroleo"></canvas></div>
+      <div class="chart-hdr"><span class="chart-ttl">Pampa Energía · m³ totales</span><span class="chart-src">datos.energia.gob.ar</span></div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartPampa"></canvas></div>
+    </div>
+    <div class="chart-box" style="margin-top:12px">
+      <div class="chart-hdr"><span class="chart-ttl">Vista Energy · m³ totales</span><span class="chart-src">datos.energia.gob.ar</span></div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartVista"></canvas></div>
+    </div>
+    <div class="chart-box" style="margin-top:12px">
+      <div class="chart-hdr"><span class="chart-ttl">GeoPark · m³ totales</span><span class="chart-src">datos.energia.gob.ar</span></div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartGeopark"></canvas></div>
     </div>
   </section>
 
@@ -180,49 +180,49 @@ function loadPetroleo() {
     var keys = Object.keys(meses).sort(); /* asc para el gráfico */
     var labels = keys.map(labelMes);
 
-    var colors = {
-      'Pampa Energía': {b:'rgba(74,240,176,.8)',  h:'rgba(74,240,176,1)'},
-      'Vista Energy':  {b:'rgba(61,184,255,.8)',   h:'rgba(61,184,255,1)'},
-      'GeoPark':       {b:'rgba(240,184,74,.8)',   h:'rgba(240,184,74,1)'}
-    };
+    var cfgs = [
+      { emp:'Pampa Energía', id:'chartPampa',   color:'rgba(74,240,176,.8)'  },
+      { emp:'Vista Energy',  id:'chartVista',   color:'rgba(61,184,255,.8)'  },
+      { emp:'GeoPark',       id:'chartGeopark', color:'rgba(240,184,74,.8)'  }
+    ];
 
-    var datasets = COLS.map(function(emp) {
-      return {
-        label: emp,
-        data: keys.map(function(k) { return meses[k][emp] || 0; }),
-        backgroundColor: colors[emp].b,
-        hoverBackgroundColor: colors[emp].h,
-        borderRadius: 3,
-        borderSkipped: false
-      };
-    });
+    function yFmt(v) {
+      if (v >= 1e6) return (v/1e6).toFixed(1)+' MM';
+      if (v >= 1e3) return Math.round(v/1e3)+'k';
+      return v;
+    }
 
-    new Chart($('chartPetroleo'), {
-      type: 'bar',
-      data: { labels: labels, datasets: datasets },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-            callbacks: {
-              label: function(ctx) {
-                var v = ctx.raw;
-                var fmt = v >= 1e6 ? (v/1e6).toFixed(2)+' MM m³' : Math.round(v/1e3).toLocaleString('es-AR')+' k m³';
-                return ' ' + ctx.dataset.label + ': ' + fmt;
+    cfgs.forEach(function(cfg) {
+      new Chart($(cfg.id), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: keys.map(function(k) { return meses[k][cfg.emp] || 0; }),
+            backgroundColor: cfg.color,
+            borderRadius: 3,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  return ' ' + yFmt(ctx.raw) + ' m³';
+                }
               }
             }
+          },
+          scales: {
+            x: { ticks: { color:'#6b7a99', font:{size:10,family:'DM Mono'}, maxRotation:45, autoSkip:true, maxTicksLimit:14 }, grid: { color:'rgba(255,255,255,0.04)' } },
+            y: { ticks: { color:'#6b7a99', font:{size:10,family:'DM Mono'}, callback: yFmt }, grid: { color:'rgba(255,255,255,0.05)' } }
           }
-        },
-        interaction: { mode: 'index', intersect: false },
-        scales: {
-          x: { ticks: { color:'#6b7a99', font:{size:10,family:'DM Mono'}, maxRotation:45, autoSkip:true, maxTicksLimit:14 }, grid: { color:'rgba(255,255,255,0.04)' } },
-          y: { ticks: { color:'#6b7a99', font:{size:10,family:'DM Mono'}, callback: function(v){ return v>=1e6?(v/1e6).toFixed(1)+' MM':Math.round(v/1e3)+'k'; } }, grid: { color:'rgba(255,255,255,0.05)' } }
         }
-      }
+      });
     });
 
     $('st-dot').className = 'pulse';
