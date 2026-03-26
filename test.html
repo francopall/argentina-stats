@@ -157,7 +157,7 @@ function loadPetroleo() {
     'ORDER BY indice_tiempo DESC ' +
     'LIMIT 120';
 
-  fetch('http://datos.energia.gob.ar/api/3/action/datastore_search_sql', {
+  fetch('/api/energia', {
     method: 'POST',
     headers: {'Content-Type': 'application/json; charset=utf-8'},
     body: JSON.stringify({sql: sql}),
