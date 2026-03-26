@@ -97,6 +97,10 @@ tbody td:first-child{text-align:left;color:var(--muted);font-size:11px}
       <div class="chart-hdr"><span class="chart-ttl">GeoPark · m³ totales</span><span class="chart-src">datos.energia.gob.ar</span></div>
       <div style="position:relative;width:100%;height:200px"><canvas id="chartGeopark"></canvas></div>
     </div>
+    <div class="chart-box" style="margin-top:12px">
+      <div class="chart-hdr"><span class="chart-ttl">YPF · m³ totales</span><span class="chart-src">datos.energia.gob.ar</span></div>
+      <div style="position:relative;width:100%;height:200px"><canvas id="chartYPF"></canvas></div>
+    </div>
   </section>
 
   <div class="status">
@@ -132,9 +136,10 @@ var EMPRESAS = {
   'VISTA OIL & GAS ARGENTINA SAU':             'Vista Energy',
   'Vista Oil & Gas Argentina SA':              'Vista Energy',
   'GEOPARK ARGENTINA S.A.':                   'GeoPark',
-  'GEOPARK ARGENTINA LTD. (SUCURSAL ARGENTINA)': 'GeoPark'
+  'GEOPARK ARGENTINA LTD. (SUCURSAL ARGENTINA)': 'GeoPark',
+  'YPF S.A.':                                  'YPF'
 };
-var COLS = ['Pampa Energía', 'Vista Energy', 'GeoPark'];
+var COLS = ['Pampa Energía', 'Vista Energy', 'GeoPark', 'YPF'];
 var RES  = '745facdc-73dc-46d8-83d5-d027bdaa3210';
 
 function labelMes(indice) {
@@ -152,7 +157,8 @@ function loadPetroleo() {
       'OR empresa = \'VISTA OIL & GAS ARGENTINA SAU\' ' +
       'OR empresa = \'Vista Oil & Gas Argentina SA\' ' +
       'OR empresa = \'GEOPARK ARGENTINA S.A.\' ' +
-      'OR empresa = \'GEOPARK ARGENTINA LTD. (SUCURSAL ARGENTINA)\') ' +
+      'OR empresa = \'GEOPARK ARGENTINA LTD. (SUCURSAL ARGENTINA)\' ' +
+      'OR empresa = \'YPF S.A.\') ' +
     'AND idconcepto IN (1, 2, 10) ' +
     'GROUP BY indice_tiempo, empresa ' +
     'ORDER BY indice_tiempo DESC ' +
@@ -183,7 +189,8 @@ function loadPetroleo() {
     var cfgs = [
       { emp:'Pampa Energía', id:'chartPampa',   color:'rgba(74,240,176,.8)'  },
       { emp:'Vista Energy',  id:'chartVista',   color:'rgba(61,184,255,.8)'  },
-      { emp:'GeoPark',       id:'chartGeopark', color:'rgba(240,184,74,.8)'  }
+      { emp:'GeoPark',       id:'chartGeopark', color:'rgba(240,184,74,.8)'  },
+      { emp:'YPF',           id:'chartYPF',     color:'rgba(255,107,107,.8)' }
     ];
 
     function yFmt(v) {
