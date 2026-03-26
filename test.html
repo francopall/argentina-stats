@@ -85,8 +85,17 @@ tbody td:first-child{text-align:left;color:var(--muted);font-size:11px}
       <h2 class="sec-title">Producción de <em>petróleo</em></h2>
       <span class="sec-src">datos.energia.gob.ar · Cuenca Neuquina</span>
     </div>
-    <div id="tbl-wrap" style="overflow-x:auto">
-      <div style="font-size:11px;color:var(--faint);padding:1rem 0">Cargando…</div>
+    <div class="chart-box">
+      <div class="chart-hdr">
+        <span class="chart-ttl">Producción mensual · m³ totales</span>
+        <span class="chart-src">datos.energia.gob.ar</span>
+      </div>
+      <div class="legend">
+        <span><span class="ldot" style="background:#4af0b0"></span>Pampa Energía</span>
+        <span><span class="ldot" style="background:#3db8ff"></span>Vista Energy</span>
+        <span><span class="ldot" style="background:#f0b84a"></span>GeoPark</span>
+      </div>
+      <div style="position:relative;width:100%;height:260px"><canvas id="chartPetroleo"></canvas></div>
     </div>
   </section>
 
@@ -128,18 +137,10 @@ var EMPRESAS = {
 var COLS = ['Pampa Energía', 'Vista Energy', 'GeoPark'];
 var RES  = '745facdc-73dc-46d8-83d5-d027bdaa3210';
 
-function fmtM3(v) {
-  if (v == null) return '<span class="tbl-empty">—</span>';
-  var n = Number(v);
-  if (n >= 1e6) return '<span class="tbl-num">' + (n/1e6).toFixed(2) + ' MM</span>';
-  if (n >= 1e3) return '<span class="tbl-num">' + Math.round(n/1e3).toLocaleString('es-AR') + ' k</span>';
-  return '<span class="tbl-num">' + Math.round(n).toLocaleString('es-AR') + '</span>';
-}
-
 function labelMes(indice) {
   var p = indice.split('-');
   var meses = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  return meses[parseInt(p[1])] + ' ' + p[0];
+  return meses[parseInt(p[1])] + ' ' + p[0].slice(2);
 }
 
 function loadPetroleo() {
@@ -155,7 +156,7 @@ function loadPetroleo() {
     'AND idconcepto IN (1, 2, 10) ' +
     'GROUP BY indice_tiempo, empresa ' +
     'ORDER BY indice_tiempo DESC ' +
-    'LIMIT 120';
+    'LIMIT 72';
 
   fetch('/api/energia', {
     method: 'POST',
@@ -176,34 +177,63 @@ function loadPetroleo() {
       meses[r.indice_tiempo][emp] = (meses[r.indice_tiempo][emp] || 0) + Number(r.total_m3);
     });
 
-    var keys = Object.keys(meses).sort().reverse();
+    var keys = Object.keys(meses).sort(); /* asc para el gráfico */
+    var labels = keys.map(labelMes);
 
-    var html = '<table>';
-    html += '<thead><tr><th>Período</th>';
-    COLS.forEach(function(c) { html += '<th>' + c + '<br><span style="font-weight:400;font-size:9px">m³ totales</span></th>'; });
-    html += '</tr></thead><tbody>';
+    var colors = {
+      'Pampa Energía': {b:'rgba(74,240,176,.8)',  h:'rgba(74,240,176,1)'},
+      'Vista Energy':  {b:'rgba(61,184,255,.8)',   h:'rgba(61,184,255,1)'},
+      'GeoPark':       {b:'rgba(240,184,74,.8)',   h:'rgba(240,184,74,1)'}
+    };
 
-    keys.forEach(function(mes) {
-      html += '<tr><td>' + labelMes(mes) + '</td>';
-      COLS.forEach(function(c) {
-        var v = meses[mes][c];
-        html += '<td>' + fmtM3(v != null ? v : null) + '</td>';
-      });
-      html += '</tr>';
+    var datasets = COLS.map(function(emp) {
+      return {
+        label: emp,
+        data: keys.map(function(k) { return meses[k][emp] || 0; }),
+        backgroundColor: colors[emp].b,
+        hoverBackgroundColor: colors[emp].h,
+        borderRadius: 3,
+        borderSkipped: false
+      };
     });
 
-    html += '</tbody></table>';
-    $('tbl-wrap').innerHTML = html;
+    new Chart($('chartPetroleo'), {
+      type: 'bar',
+      data: { labels: labels, datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(ctx) {
+                var v = ctx.raw;
+                var fmt = v >= 1e6 ? (v/1e6).toFixed(2)+' MM m³' : Math.round(v/1e3).toLocaleString('es-AR')+' k m³';
+                return ' ' + ctx.dataset.label + ': ' + fmt;
+              }
+            }
+          }
+        },
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { ticks: { color:'#6b7a99', font:{size:10,family:'DM Mono'}, maxRotation:45, autoSkip:true, maxTicksLimit:14 }, grid: { color:'rgba(255,255,255,0.04)' } },
+          y: { ticks: { color:'#6b7a99', font:{size:10,family:'DM Mono'}, callback: function(v){ return v>=1e6?(v/1e6).toFixed(1)+' MM':Math.round(v/1e3)+'k'; } }, grid: { color:'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+
     $('st-dot').className = 'pulse';
-    $('st-msg').textContent = 'Actualizado · datos.energia.gob.ar · Cuenca Neuquina · idconcepto 1+2+10';
+    $('st-msg').textContent = 'Actualizado · datos.energia.gob.ar · Cuenca Neuquina';
   })
   .catch(function() { showError(); });
 }
 
 function showError() {
-  $('tbl-wrap').innerHTML = '<div style="color:var(--danger);font-size:11px">Error al cargar datos</div>';
   $('st-dot').className = 'pulse warn';
-  $('st-msg').textContent = 'Error';
+  $('st-msg').textContent = 'Error al cargar datos';
 }
 
 loadPetroleo();
