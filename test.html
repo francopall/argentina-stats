@@ -59,6 +59,15 @@ footer{border-top:0.5px solid var(--border);padding:2rem;max-width:900px;margin:
 footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .page>*{animation:fadeUp .4s ease both}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:.5rem .75rem;border-bottom:0.5px solid var(--border2);text-align:right;white-space:nowrap}
+thead th:first-child{text-align:left}
+tbody tr{border-bottom:0.5px solid var(--border);transition:background .15s}
+tbody tr:hover{background:var(--bg2)}
+tbody td{padding:.45rem .75rem;text-align:right;color:var(--text)}
+tbody td:first-child{text-align:left;color:var(--muted);font-size:11px}
+.tbl-num{font-family:var(--fd);font-size:13px}
+.tbl-empty{color:var(--faint);font-size:11px}
 </style>
 </head>
 <body>
@@ -71,11 +80,19 @@ footer p{font-size:10px;color:var(--faint);max-width:380px;line-height:1.6}
 </nav>
 
 <div class="page">
-  <!-- contenido de prueba acá -->
+  <section>
+    <div class="sec-hdr">
+      <h2 class="sec-title">Producción de <em>petróleo</em></h2>
+      <span class="sec-src">datos.energia.gob.ar · Cuenca Neuquina</span>
+    </div>
+    <div id="tbl-wrap" style="overflow-x:auto">
+      <div style="font-size:11px;color:var(--faint);padding:1rem 0">Cargando…</div>
+    </div>
+  </section>
 
   <div class="status">
     <span class="pulse" id="st-dot"></span>
-    <span id="st-msg">Test</span>
+    <span id="st-msg">Cargando…</span>
   </div>
 </div>
 
@@ -98,7 +115,98 @@ function safeGet(url) {
     .catch(function() { return null; });
 }
 
-/* --- código de prueba acá --- */
+/* --- Producción de petróleo · Cuenca Neuquina --- */
+
+var EMPRESAS = {
+  'PAMPA ENERGIA S.A.':                        'Pampa Energía',
+  'VISTA ENERGY ARGENTINA SAU':                'Vista Energy',
+  'VISTA OIL & GAS ARGENTINA SAU':             'Vista Energy',
+  'Vista Oil & Gas Argentina SA':              'Vista Energy',
+  'GEOPARK ARGENTINA S.A.':                   'GeoPark',
+  'GEOPARK ARGENTINA LTD. (SUCURSAL ARGENTINA)': 'GeoPark'
+};
+var COLS = ['Pampa Energía', 'Vista Energy', 'GeoPark'];
+var RES  = '745facdc-73dc-46d8-83d5-d027bdaa3210';
+
+function fmtM3(v) {
+  if (v == null) return '<span class="tbl-empty">—</span>';
+  var n = Number(v);
+  if (n >= 1e6) return '<span class="tbl-num">' + (n/1e6).toFixed(2) + ' MM</span>';
+  if (n >= 1e3) return '<span class="tbl-num">' + Math.round(n/1e3).toLocaleString('es-AR') + ' k</span>';
+  return '<span class="tbl-num">' + Math.round(n).toLocaleString('es-AR') + '</span>';
+}
+
+function labelMes(indice) {
+  var p = indice.split('-');
+  var meses = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return meses[parseInt(p[1])] + ' ' + p[0];
+}
+
+function loadPetroleo() {
+  var sql = 'SELECT indice_tiempo, empresa, SUM(cantidad) as total_m3 ' +
+    'FROM "' + RES + '" ' +
+    'WHERE cuenca = \'NEUQUINA\' ' +
+    'AND (empresa = \'PAMPA ENERGIA S.A.\' ' +
+      'OR empresa = \'VISTA ENERGY ARGENTINA SAU\' ' +
+      'OR empresa = \'VISTA OIL & GAS ARGENTINA SAU\' ' +
+      'OR empresa = \'Vista Oil & Gas Argentina SA\' ' +
+      'OR empresa = \'GEOPARK ARGENTINA S.A.\' ' +
+      'OR empresa = \'GEOPARK ARGENTINA LTD. (SUCURSAL ARGENTINA)\') ' +
+    'AND idconcepto IN (1, 2, 10) ' +
+    'GROUP BY indice_tiempo, empresa ' +
+    'ORDER BY indice_tiempo DESC ' +
+    'LIMIT 120';
+
+  fetch('http://datos.energia.gob.ar/api/3/action/datastore_search_sql', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json; charset=utf-8'},
+    body: JSON.stringify({sql: sql}),
+    signal: AbortSignal.timeout(15000)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.success) { showError(); return; }
+
+    /* Agregar por mes y empresa normalizada */
+    var meses = {};
+    data.result.records.forEach(function(r) {
+      var emp = EMPRESAS[r.empresa];
+      if (!emp) return;
+      if (!meses[r.indice_tiempo]) meses[r.indice_tiempo] = {};
+      meses[r.indice_tiempo][emp] = (meses[r.indice_tiempo][emp] || 0) + Number(r.total_m3);
+    });
+
+    var keys = Object.keys(meses).sort().reverse();
+
+    var html = '<table>';
+    html += '<thead><tr><th>Período</th>';
+    COLS.forEach(function(c) { html += '<th>' + c + '<br><span style="font-weight:400;font-size:9px">m³ totales</span></th>'; });
+    html += '</tr></thead><tbody>';
+
+    keys.forEach(function(mes) {
+      html += '<tr><td>' + labelMes(mes) + '</td>';
+      COLS.forEach(function(c) {
+        var v = meses[mes][c];
+        html += '<td>' + fmtM3(v != null ? v : null) + '</td>';
+      });
+      html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    $('tbl-wrap').innerHTML = html;
+    $('st-dot').className = 'pulse';
+    $('st-msg').textContent = 'Actualizado · datos.energia.gob.ar · Cuenca Neuquina · idconcepto 1+2+10';
+  })
+  .catch(function() { showError(); });
+}
+
+function showError() {
+  $('tbl-wrap').innerHTML = '<div style="color:var(--danger);font-size:11px">Error al cargar datos</div>';
+  $('st-dot').className = 'pulse warn';
+  $('st-msg').textContent = 'Error';
+}
+
+loadPetroleo();
 
 </script>
 </body>
